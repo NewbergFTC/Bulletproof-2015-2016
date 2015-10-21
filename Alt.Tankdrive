@@ -17,6 +17,9 @@ public class  TankDriveAlt extends OpMode {
         //Gets the variables for the motors
        leftfront = hardwareMap.dcMotor.get("lf");
         rightfront = hardwareMap.dcMotor.get("rf");
+        leftback= hardwareMap.dcMotor.get("lb");
+        rightback=hardwareMap.dcMotor.get("rb");
+        
         //it reverses the Motor the reversed direction
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         rightback.setDirection(DcMotor.Direction.REVERSE);
