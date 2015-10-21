@@ -32,8 +32,7 @@ public class DriveTrain extends OpMode{
         float rightY = -gamepad1.right_stick_y;
         // float leftX= -gamepad1.left_ stick_x;
         //float rightX= -gamepad1.right_stick_x;
-        Range.clip(leftY,-1,1);
-        Range.clip(rightY,-1,1);
+
         /*
         {
             if (gamepad1.a)
