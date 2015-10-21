@@ -1,4 +1,3 @@
-package us.newberg.bullet;
 
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +9,8 @@ import com.qualcomm.robotcore.util.Range;
 public class  TankDriveAlt extends OpMode {
     DcMotor leftfront;
     DcMotor rightfront;
+    DcMotor leftback;
+    DcMotor rightback;
 
     @Override
     public void init() {
@@ -18,6 +19,7 @@ public class  TankDriveAlt extends OpMode {
         rightfront = hardwareMap.dcMotor.get("rf");
         //it reverses the Motor the reversed direction
         rightfront.setDirection(DcMotor.Direction.REVERSE);
+        rightback.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void loop(){
@@ -26,8 +28,13 @@ public class  TankDriveAlt extends OpMode {
         float leftpower= ValueY+ValueX;
         float rightpower= ValueY-ValueX;
 
-        leftpower=Range.clip(leftpower,-1,1);
-        rightpower=Range.clip(rightpower,-1,1);
+        leftpower= Range.clip(leftpower,-1,1);
+        rightpower= Range.clip(rightpower,-1,1);
 
         leftfront.setPower(leftpower);
         rightfront.setPower(rightpower);
+        leftback.setPower(leftpower);
+        rightback.setPower(rightpower);
+    }
+}
+
