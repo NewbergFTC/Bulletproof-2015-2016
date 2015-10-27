@@ -5,3 +5,20 @@ import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Hardware;
+
+
+public class DriveTrain extends OpMode{
+    DcMotor lf;
+    DcMotor lb;
+    DcMotor rf;
+    DcMotor rb;
+    
+    @Override 
+    public void init(){
+        lf = hardwareMap.dcMotor.get("lf");
+        lb = hardwareMap.dcMotor.get("lb");
+        rf = hardwareMap.dcMotor.get("rf");
+        rb = hardwareMap.dcMotor.get("rb");
+    }
+    public void loop(){
+      lf.set.power
