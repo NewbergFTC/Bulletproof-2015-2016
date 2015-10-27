@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.Hardware;
 
 /**
  * Created by btaka on 10/9/2015.
- */
+ 
 
 public class DriveTrain extends OpMode{
     DcMotor lf;
@@ -45,3 +45,19 @@ public class DriveTrain extends OpMode{
         }
     }
 }
+*/
+
+public class DriveTrain extends OpMode{
+    DcMotor lf;
+    DcMotor lb;
+    DcMotor rf;
+    DcMotor rb;
+    
+    @Override 
+    public void init(){
+        lf = hardwareMap.dcMotor.get("lf");
+        lb = hardwareMap.dcMotor.get("lb");
+        rf = hardwareMap.dcMotor.get("rf");
+        rb = hardwareMap.dcMotor.get("rb");
+    }
+    
