@@ -21,4 +21,4 @@ public class DriveTrain extends OpMode{
         rb = hardwareMap.dcMotor.get("rb");
     }
     public void loop(){
-      lf.set.power
+      lf.set.power(1)
