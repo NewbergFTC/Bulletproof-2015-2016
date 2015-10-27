@@ -19,6 +19,26 @@ public class DriveTrain extends OpMode{
         lb = hardwareMap.dcMotor.get("lb");
         rf = hardwareMap.dcMotor.get("rf");
         rb = hardwareMap.dcMotor.get("rb");
+        rf.direction.(REVERSE);
+        rb.direction.set.(REVERSE);
     }
     public void loop(){
-      lf.set.power(1)
+    //make it go forward
+      lf.setPower(1);
+      rf.setPower(1);
+      lb.setPower(1);
+      rb.setPower(1);
+      pause(2000);
+      lf.setPower(-1);
+      rf.setPower(1);
+      lb.setPower(-1);
+      rb.setPower(1);
+      pause(1000);
+      lf.setPower(1);
+      rf.setPower(1);
+      lb.setPower(1);
+      rb.setPower(1);
+      pause(5000);
+      stop
+      }
+}
