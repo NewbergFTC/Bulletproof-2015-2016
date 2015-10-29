@@ -22,16 +22,16 @@ public class LightSensorTest extends OpMode{
     @Override
     public void loop() {
     float lightsensordata = lightSensor.getLightDetected();
-      if (lightsensordata => .8){
+      if (lightsensordata => 80){
         lf.setPower(0)
         lb.setPower(0)
         rf.setPower(0)
         rb.setPower(0)
         }else{
-        lf.setPower(1)
-        lb.setPower(1)
-        rf.setPower(1)
-        rb.setPower(1)
+        lf.setPower(left)
+        lb.setPower(left)
+        rf.setPower(right)
+        rb.setPower(right)
         }
         telemetry.addData("lightsensordata value", lightsensordata)
     }
