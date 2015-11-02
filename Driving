@@ -30,8 +30,8 @@ package us.newberg.bullet;
             leftY= -gamepad.leftstick.y
             rightY= -gamepad.leftstick.y
             
-            //Which motor gets reveresed
-            //Which motor gets reveresed
+            leftback.direction.setDirection(REVERSE)
+            rightback.direction.setDirection(REVERSE)
             
         public void loop() {
             double currentTime= time.time();
