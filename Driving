@@ -19,22 +19,45 @@ package us.newberg.bullet;
         int count = 0
         
         enum State {fowarddrive,sleeping,done};
-        State= state
+        State state;
         
         @Override
         public void init() {
-            leftfront= hardwareMap.dcmotor.get("lf")
-            rightfront= hardwareMap.dcmotor.get("rf)
-            leftback= hardwareMap.dcmotor.get("lb")
-            rightback= hardwareMap.dcmotor.get("rb")
-            leftY= -gamepad.leftstick.y
-            rightY= -gamepad.leftstick.y
+            leftfront= hardwareMap.dcmotor.get("lf");
+            rightfront= hardwareMap.dcmotor.get("rf);
+            leftback= hardwareMap.dcmotor.get("lb");
+            rightback= hardwareMap.dcmotor.get("rb");
+            leftY= -gamepad.leftstick.y;
+            rightY= -gamepad.leftstick.y;
             
-            leftback.direction.setDirection(REVERSE)
-            rightback.direction.setDirection(REVERSE)
-            
+            leftback.direction.setDirection(REVERSE);
+            rightback.direction.setDirection(REVERSE);
+        }
+        
         public void loop() {
             double currentTime= time.time();
+            
+            switch (state) {
+                case fowarddrive:
+                  leftfront.setpower(leftY)
+                  rightfront.setpower(right)
+                break;
+                case sleeping:
+                 if (currentTime> fowardtime) {
+                     state = State.sleeping;
+                 }
+                 time.reset
+                 }
+          /*
+                break;
+                case done:
+                // Code...
+                break;
+                default:
+                
+                break;
+            }
+            
           switch(state) {
               leftfront.setpower(leftY)
               rightfront.setpower(right)
@@ -44,8 +67,8 @@ package us.newberg.bullet;
               time.reset();
               }
           break;
-          
-          case(turning)
+          */
+          case(sleeping)
               leftfront.setpower(0)
               rightfront.setpower(0)
             if(currentTime> sleeping) {
