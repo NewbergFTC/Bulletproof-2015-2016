@@ -5,6 +5,7 @@ import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.util.Hardware;
+import com.qualcomm.robotcore.hardware.Servo;
 
 public class DriveUpRamp extends OpMode{
     final static double MOTOR_POWER = 0.50;
@@ -14,6 +15,12 @@ public class DriveUpRamp extends OpMode{
     DcMotor rb;
     double left = 0.0;
     double right = 0.0;
+    Servo leftArm;
+    Servo rightArm;
+    final double LEFT_ARM_OPEN = .5;//need to revers one of the servos
+    final double LEFT_ARM_CLOSED = 0.0;
+    final double RIGHT_ARM_OPEN = 0.5;
+    final double RIGHT_ARM_CLOSED = 0.0;
 
     @Override
     public void init() {
@@ -24,6 +31,10 @@ public class DriveUpRamp extends OpMode{
         rb = hardwareMap.dcMotor.get("rb");
         lf.setDirection(DcMotor.Direction.REVERSE);
         lb.setDirection(DcMotor.Direction.REVERSE);
+        leftArm = hardwareMap.servo.get("leftArm");
+        rightArm = hardwareMap.servo.get("rightArm");
+        rightArm.setPosition(RIGHT_ARM_CLOSED);
+        leftArm.setPosition(LEFT_ARM_CLOSED);
     }
     @Override
     public void loop() {
