@@ -40,15 +40,15 @@ public class TeleopWithServoArms extends OpMode {
         rightfront.setPower(rightY);
         leftback.setPower(leftY);
         rightback.setPower(rightY);
-        if(gamepad1.x){
+        if(gamepad2.x){
             leftArm.setPosition(LEFT_ARM_OPEN);
             //rightArm.setPosition(RIGHT_ARM_OPEN);
         }
-        if(gamepad1.b){
+        if(gamepad2.b){
             //leftArm.setPosition(LEFT_ARM_CLOSED);
             rightArm.setPosition(RIGHT_ARM_OPEN);
         }
-        if(gamepad1.y){
+        if(gamepad2.y){
             leftArm.setPosition(LEFT_ARM_CLOSED);
             rightArm.setPosition(RIGHT_ARM_CLOSED);
         }
