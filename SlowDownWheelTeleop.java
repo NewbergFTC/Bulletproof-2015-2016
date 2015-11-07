@@ -43,7 +43,7 @@ public void init() {
         leftY= -gamepad.leftstick.y;
         rightY= -gamepad.leftstick.y;
 
-        leftback.direction.setDirection(REVERSE);
+        rightfront.direction.setDirection(REVERSE);
         rightback.direction.setDirection(REVERSE);
         ArmTilt = hardwareMap.dcMotor.get("ArmTilt");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
@@ -77,6 +77,7 @@ public void loop() {
         }
         leftback.setpower(leftY)
         rightback.setpower(rightY)
+        {
         if(gamepad2.x){
         leftArm.setPosition(LEFT_ARM_OPEN);
         //rightArm.setPosition(RIGHT_ARM_OPEN);
@@ -89,24 +90,24 @@ public void loop() {
         leftArm.setPosition(LEFT_ARM_CLOSED);
         rightArm.setPosition(RIGHT_ARM_CLOSED);
         }
-        if(gamepad2.right_trigger > .01){
+        if(gamepad2.right_trigger>.01){
         ArmTilt.setPower(PowerForward);
         }else{
         ArmTilt.setPower(ArmStop);
         }
-        if(gamepad2.left_trigger > .01) {
+        if(gamepad2.left_trigger>.01){
         ArmLift.setPower(PowerForward);
         }else{
         ArmLift.setPower(ArmStop);
         }
-        if(gamepad2.right_bumper) {
+        if(gamepad2.right_bumper){
         ArmTilt.setPower(PowerBack);
         }else{
         ArmTilt.setPower(ArmStop);
         }
-        if(gamepad2.left_bumper) {
+        if(gamepad2.left_bumper){
         ArmLift.setPower(PowerBack);
-        }else {
+        }else{
         ArmLift.setPower(ArmStop);
         }
         }
