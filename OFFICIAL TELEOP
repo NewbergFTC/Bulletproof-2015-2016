@@ -8,11 +8,13 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 //import com.qualcomm.robotcore.util.Hardware;
 import com.qualcomm.robotcore.hardware.Servo;
 //A base servo program to go off of for future use
+
 public class OfficialTeleOp extends OpMode {
     DcMotor leftfront;
     DcMotor leftback;
     DcMotor rightfront;
     DcMotor rightback;
+    float count = 0;
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     Servo leftArm;
     Servo rightArm;
@@ -26,6 +28,7 @@ public class OfficialTeleOp extends OpMode {
     final double PowerForward = .5;
     final double PowerBack = -.5;
     final double ArmStop = 0;
+
     @Override
     public void init(){
         leftfront = hardwareMap.dcMotor.get("lf");
@@ -45,8 +48,18 @@ public class OfficialTeleOp extends OpMode {
     }
     @Override
     public void loop() {
-        float leftY = -gamepad1.left_stick_y;
-        float rightY = -gamepad1.right_stick_y;
+        float leftY=-gamepad1.left_stick_y;
+        float rightY= -gamepad1.right_stick_y;
+        if (gamepad1.a) {
+            count = 1;
+        }
+        if (gamepad1.b) {
+            count = 0;
+        }
+        if(count > 0){
+            leftY = leftY/ 2;
+            rightY = rightY/ 2;
+        }
         leftfront.setPower(leftY);
         rightfront.setPower(rightY);
         leftback.setPower(leftY);
@@ -65,6 +78,7 @@ public class OfficialTeleOp extends OpMode {
             rightArm.setPosition(RIGHT_ARM_CLOSED);
         }
         /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        /*
         if(gamepad2.right_trigger > .01){
             ArmTilt.setPower(PowerForward);
         }else{
@@ -85,5 +99,6 @@ public class OfficialTeleOp extends OpMode {
         }else {
             ArmLift.setPower(ArmStop);
         }
+        */
     }
 }
