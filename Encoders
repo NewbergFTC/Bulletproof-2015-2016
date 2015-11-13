@@ -1,0 +1,38 @@
+package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+
+/**
+ * Created by Robo on 11/13/2015.
+ */
+public class Encoders {
+    DcMotor leftfront;
+    DcMotor rightfront;
+
+    static final int ENCODER_CPR = 144; // Encoder Counts per revolution
+    static final double GEAR_RATIO = 2;
+    static final int WHEEL_DIAMETER = 7;
+    final static int DISTANCE = 94;
+
+    final static double CIRCUMFERNCE = Math.PI * WHEEL_DIAMETER;
+    final static double ROTATIONS = DISTANCE / CIRCUMFERNCE;
+    final static double COUNTS = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+
+    @Override
+    public void init() {
+        leftfront = hardwareMap.dcMotor.get("lf");
+        rightfront = hardwareMap.dcMotor.get("rf");
+
+        rightfront.setDirection(DcMotor.Direction.REVERSE);
+    }
+    @Override
+    public void start(){
+        leftfront.setTargetPosition((int)COUNTS;
+        rightfront.setTargetPosition((int)COUNTS;
+
+        leftfront.setChannelMode(DcMotorController.Runmode.RUN_TO_POSITION);
+        rightfront.setChannelMode(DcMotorController.Runmode.RUN_TO_POSITION);
+
+        leftfront.setPower(0.5);
+        rightfront.setPower(0.5);
+    }
+}
+
