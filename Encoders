@@ -22,6 +22,9 @@ public class Encoders {
         rightfront = hardwareMap.dcMotor.get("rf");
 
         rightfront.setDirection(DcMotor.Direction.REVERSE);
+        
+        rightfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        leftfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
     }
     @Override
     public void start(){
@@ -32,8 +35,12 @@ public class Encoders {
         rightfront.setChannelMode(DcMotorController.Runmode.RUN_TO_POSITION);
 
         leftfront.setPower(0.5);
-        rightfront.setPower(0.5);
+        rightfront.setPower(0.5);;
+    @Override 
+    public void loop() {
+    telemetry.addData("Motor Target", COUNTS);
+    telemetry.addData("Left Position",leftfront.getCurrentPosition(();
+    telemetry.addData("Right Position", rightfront.getCurrentPosition(();
     }
 }
-//NEEDS WORK
 
