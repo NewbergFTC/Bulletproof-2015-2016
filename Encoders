@@ -1,46 +1,93 @@
-package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+package com.qualcomm.ftcrobotcontroller.opmodes;
+
+
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
 
 /**
- * Created by Robo on 11/13/2015.
+ * Created by thesm_000 on 11/10/2015.
  */
-public class Encoders {
-    DcMotor leftfront;
-    DcMotor rightfront;
 
-    static final int ENCODER_CPR = 144; // Encoder Counts per revolution
-    static final double GEAR_RATIO = 2;
-    static final int WHEEL_DIAMETER = 7;
-    final static int DISTANCE = 94;
 
-    final static double CIRCUMFERNCE = Math.PI * WHEEL_DIAMETER;
-    final static double ROTATIONS = DISTANCE / CIRCUMFERNCE;
-    final static double COUNTS = ENCODER_CPR * ROTATIONS * GEAR_RATIO;
+public class Encoders extends LinearOpMode
+{
+    private DcMotor _frontLeft;
+    private DcMotor _frontRight;
+    private DcMotor _backLeft;
+    private DcMotor _backRight;
+
+    private DcMotorController _leftCon;
 
     @Override
-    public void init() {
-        leftfront = hardwareMap.dcMotor.get("lf");
-        rightfront = hardwareMap.dcMotor.get("rf");
+    public void runOpMode() throws InterruptedException {
+        _frontLeft = hardwareMap.dcMotor.get("lf");
+        _backLeft = hardwareMap.dcMotor.get("lb");
+        _frontRight = hardwareMap.dcMotor.get("rf");
+        _backRight = hardwareMap.dcMotor.get("rb");
 
-        rightfront.setDirection(DcMotor.Direction.REVERSE);
-        
-        rightfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        leftfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-    }
-    @Override
-    public void start(){
-        leftfront.setTargetPosition((int)COUNTS;
-        rightfront.setTargetPosition((int)COUNTS;
+        _leftCon = hardwareMap.dcMotorController.get("leftController");
 
-        leftfront.setChannelMode(DcMotorController.Runmode.RUN_TO_POSITION);
-        rightfront.setChannelMode(DcMotorController.Runmode.RUN_TO_POSITION);
+        _frontRight.setDirection(DcMotor.Direction.REVERSE);
+        _backRight.setDirection(DcMotor.Direction.REVERSE);
 
-        leftfront.setPower(0.5);
-        rightfront.setPower(0.5);;
-    @Override 
-    public void loop() {
-    telemetry.addData("Motor Target", COUNTS);
-    telemetry.addData("Left Position",leftfront.getCurrentPosition(();
-    telemetry.addData("Right Position", rightfront.getCurrentPosition(();
+
+        _frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        //2000 ticks = 81.6 inches
+        //1000 ticks = 40.8 inches
+        //500 ticks = 20.4 inches
+        //250 ticks = 10.2 inches
+
+
+        waitForStart();
+
+        while (opModeIsActive())
+        {
+            _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            _frontLeft.setPower(0.2);
+            _frontRight.setPower(0.2);
+            _backRight.setPower(0.25);
+            _backLeft.setPower(0.25);
+
+            _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+
+            int ticks = _frontLeft.getCurrentPosition();
+            //telemetry.addData("Ticks:", String.valueOf(ticks));
+
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+
+            if(ticks >= 2000) {
+                _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+                waitOneFullHardwareCycle();
+                waitOneFullHardwareCycle();
+                _frontLeft.setPower(0);
+                _backLeft.setPower(0);
+                _frontRight.setPower(0);
+                _backRight.setPower(0);
+                break;
+            }
+
+
+            //_leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+
+
+
+        }
     }
 }
 
