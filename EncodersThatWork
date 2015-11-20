@@ -20,6 +20,12 @@ public class Encoders extends LinearOpMode
 
     private DcMotorController _leftCon;
 
+    final double GEAR_ONE_TEETH = 16;
+    final double GEAR_TWO_TEETH = 30;
+    final double CLICKS_PER_REVOLUTION = 1120;
+    final double WHEEL_CIRCUMFERENCE = 7 * Math.PI;
+    final double DISTANCE = 25;
+
     @Override
     public void runOpMode() throws InterruptedException {
         _frontLeft = hardwareMap.dcMotor.get("lf");
@@ -48,29 +54,39 @@ public class Encoders extends LinearOpMode
 
         waitForStart();
 
-        while (opModeIsActive())
-        {
+        while (opModeIsActive()) {
+            double inches = DISTANCE;
+            double goal = (GEAR_TWO_TEETH/GEAR_ONE_TEETH)*(CLICKS_PER_REVOLUTION/WHEEL_CIRCUMFERENCE)*inches;
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+            waitOneFullHardwareCycle();
+            waitOneFullHardwareCycle();
+            int ticks = _frontLeft.getCurrentPosition();
+            //telemetry.addData("Ticks:", String.valueOf(ticks));
             _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+            if(ticks < 10){
+                _backLeft.setPower(.5);
+                _frontLeft.setPower(0.5);
+                _frontRight.setPower(0.5);
+                _backRight.setPower(0.5);
+                waitOneFullHardwareCycle();
+                waitOneFullHardwareCycle();
+            }
+
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
-            _frontLeft.setPower(0.2);
-            _frontRight.setPower(0.2);
-            _backRight.setPower(0.25);
-            _backLeft.setPower(0.25);
 
             _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
 
-            int ticks = _frontLeft.getCurrentPosition();
-            //telemetry.addData("Ticks:", String.valueOf(ticks));
-
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
             waitOneFullHardwareCycle();
 
-            if(ticks >= 2000) {
+            if(ticks > goal) {
                 _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
                 waitOneFullHardwareCycle();
                 waitOneFullHardwareCycle();
@@ -90,4 +106,3 @@ public class Encoders extends LinearOpMode
         }
     }
 }
-
