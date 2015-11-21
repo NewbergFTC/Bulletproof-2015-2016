@@ -1,0 +1,195 @@
+package com.qualcomm.ftcrobotcontroller.opmodes;
+import com.qualcomm.ftccommon.DbgLog;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
+import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorController;
+
+public class Encoders extends LinearOpMode {
+    private DcMotor _frontLeft;
+    private DcMotor _frontRight;
+    private DcMotor _backLeft;
+    private DcMotor _backRight;
+    private DcMotorController _leftCon;
+    private DcMotorController _rightCon;
+    final double GEAR_ONE_TEETH = 16;
+    final double GEAR_TWO_TEETH = 30;
+    final double CLICKS_PER_REVOLUTION = 1120;
+    final double WHEEL_CIRCUMFERENCE = 7 * Math.PI;
+    final double DISTANCE = 25;
+    final double MOTOR_POWER = .5;
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        _frontLeft = hardwareMap.dcMotor.get("lf");
+        _backLeft = hardwareMap.dcMotor.get("lb");
+        _frontRight = hardwareMap.dcMotor.get("rf");
+        _backRight = hardwareMap.dcMotor.get("rb");
+        _leftCon = hardwareMap.dcMotorController.get("leftController");
+        _rightCon = hardwareMap.dcMotorController.get("rightController");
+
+        _frontRight.setDirection(DcMotor.Direction.REVERSE);
+        _backRight.setDirection(DcMotor.Direction.REVERSE);
+        _frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        _frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        _frontRight.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        DbgLog.msg("end of init");
+
+        waitForStart();
+
+        DbgLog.msg("entering loop");
+
+        //while (opModeIsActive()) {
+        goForward(40, MOTOR_POWER);
+            //Thread.sleep(1000);
+        goForward(20,MOTOR_POWER);
+            //break;
+        //}
+    }
+    public void goForward(int distance, double motor_power) throws InterruptedException {
+        //_frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        //_frontLeft.setMode(DcMotorController.RunMode.RESET_ENCODERS);
+        //_frontLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        //_frontLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        double inches = distance;
+        double goal = (GEAR_TWO_TEETH/GEAR_ONE_TEETH)*(CLICKS_PER_REVOLUTION/WHEEL_CIRCUMFERENCE)*inches;//Get ticks for the distance needed to travel
+        ResetEncoders();
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        //_leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        int ticks ;
+        //ticks = _frontLeft.getCurrentPosition();
+        //telemetry.addData("Ticks:", String.valueOf(ticks));
+
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _backLeft.setPower(motor_power);
+        _frontLeft.setPower(motor_power);
+        _frontRight.setPower(motor_power);
+        _backRight.setPower(motor_power);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        //telemetry.addData("Goal:", String.valueOf(goal));
+        //telemetry.addData("Ticks:", String.valueOf(ticks));
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        ticks = _frontLeft.getCurrentPosition();
+        while(ticks <= goal){
+            ticks = _frontLeft.getCurrentPosition();
+        }
+        telemetry.addData("Goal:", String.valueOf(goal));
+        //telemetry.addData("Ticks:", String.valueOf(ticks));
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeft.setPower(0);
+        _backLeft.setPower(0);
+        _frontRight.setPower(0);
+        _backRight.setPower(0);
+
+    }
+
+    public void goTurn(int degrees,int direction, double motor_power) throws InterruptedException {
+        double leftpower;
+        int ticks ;
+        double rightpower;
+        double turngoal = (GEAR_TWO_TEETH/GEAR_ONE_TEETH)*(CLICKS_PER_REVOLUTION)*degrees/360  ;//Get ticks for the distance needed to travel
+        ResetEncoders();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        //telemetry.addData("Ticks:", String.valueOf(ticks));
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        leftpower = direction * motor_power;
+        rightpower = -1 *direction * motor_power;
+        _frontLeft.setPower(leftpower);
+        _backLeft.setPower(leftpower);
+        _backRight.setPower(rightpower);
+        _frontRight.setPower(rightpower);
+        //telemetry.addData("Goal:", String.valueOf(turngoal));
+        //telemetry.addData("Ticks:", String.valueOf(ticks));
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+        ticks = _frontLeft.getCurrentPosition();
+        while(ticks<turngoal){
+            ticks = _frontLeft.getCurrentPosition();
+        }
+        _leftCon.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        waitOneFullHardwareCycle();
+        waitOneFullHardwareCycle();
+
+        _frontLeft.setPower(0);
+        _backLeft.setPower(0);
+        _frontRight.setPower(0);
+        _backRight.setPower(0);
+    }
+
+
+    public void ResetEncoders(){
+        _frontLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+    }
+}
