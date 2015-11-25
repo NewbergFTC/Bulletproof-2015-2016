@@ -8,17 +8,17 @@ public class OfficialAutonomousBlue extends BulletProofOpMode {
     }
     @Override
     public void runOpMode() throws InterruptedException {
-        super.init();
+        super.Init();
         waitForStart();
         while (opModeIsActive()) {
             goForward(42 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT);
             sleep(500);
-            goTurn(30 , RIGHT, MOTOR_POWER);
+            goTurn(33 , RIGHT, TURN_POWER);
             // goForward(20, MOTOR_POWER);
             sleep(500);
             goForward(40 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT);
             sleep(500);
-            goTurn(42 , RIGHT, MOTOR_POWER);
+            goTurn(30 , RIGHT, TURN_POWER);
             sleep(500);
             goForward(36 , 1 , 1); //accelerate into wall
             sleep(500);
@@ -26,3 +26,4 @@ public class OfficialAutonomousBlue extends BulletProofOpMode {
         }
     }
 }
+
