@@ -3,15 +3,7 @@ package us.newberg.bullet;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-//import com.qualcomm.robotcore.eventloop.opmode.OpMode;
-//import com.qualcomm.ftcrobotcontroller.FtcRobotControllerActivity;
-//import com.qualcomm.robotcore.hardware.HardwareMap;
-//import com.qualcomm.robotcore.util.Hardware;
 import com.qualcomm.robotcore.hardware.Servo;
-
-/**
- * Created by btaka on 11/6/2015.
- */
 public class OFFICIAL_TELEOP extends OpMode {
         DcMotor leftfront;
         DcMotor leftback;
@@ -105,5 +97,6 @@ public class OFFICIAL_TELEOP extends OpMode {
         */
         }
     }
+
 
 
