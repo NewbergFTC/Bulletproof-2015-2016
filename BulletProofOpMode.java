@@ -1,9 +1,15 @@
-package us.newberg.bullet;
+package com.qualcomm.ftcrobotcontroller.opmodes;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-public abstract class BulletProofOpMode extends LinearOpMode {
+import com.qualcomm.robotcore.util.Util;
+
+import java.lang.ref.Reference;
+
+public abstract class BulletOpMode extends LinearOpMode {
     public DcMotor leftfront;
     public DcMotor leftback;
     public DcMotor rightfront;
@@ -17,9 +23,6 @@ public abstract class BulletProofOpMode extends LinearOpMode {
     final double LEFT_ARM_CLOSED = 0.0;
     final double RIGHT_ARM_OPEN = 0.5;
     final double RIGHT_ARM_CLOSED = 0.0;
-    final double PowerForward = .5;
-    final double PowerBack = -.5;
-    final double ArmStop = 0;
     final double GEAR_ONE_TEETH = 16;
     final double GEAR_TWO_TEETH = 30;
     final double CLICKS_PER_REVOLUTION = 1120;
@@ -34,6 +37,19 @@ public abstract class BulletProofOpMode extends LinearOpMode {
     final double MOTOR_POWER_LEFT = 0.6;
     final double MOTOR_POWER_RIGHT = 0.35;
     float count  = 0;
+    final double ArmGear1 = 72;
+    final double ArmGear2 = 20;
+    final double ArmGear3 = 72;
+    final double ArmGear4 = 34;
+    DcMotor ArmTiltLeft;
+    DcMotor ArmTiltRight;
+    DcMotor ArmLift;
+    final int armForward = 1;
+    final int armBack = -1;
+    public DcMotorController ArmController;
+    final double PowerForward = .2;
+    final double PowerBack = -.2;
+    final double ArmStop = 0;
     protected final void Init() throws InterruptedException {   //Sets up motor configurations, etc.
         leftfront = hardwareMap.dcMotor.get("lf");
         leftback = hardwareMap.dcMotor.get("lb");
@@ -60,7 +76,7 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         waitCycle(6);
         int position = leftfront.getCurrentPosition();
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
-       waitCycle(6);
+        waitCycle(6);
         return position;
     }
     public void motorDrive(float motorPower){  //Driving forward
@@ -75,6 +91,10 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         leftback.setPower(0);
         rightback.setPower(0);
     }
+    public void StopArmMotors(){  //Stopping the robot
+        ArmTiltLeft.setPower(0);
+        ArmTiltRight.setPower(0);
+    }
     public void motorTurn(double motor_power , double direction){//Turning robot
         double leftpower = direction * motor_power;
         double rightpower = -1 *direction * motor_power;
@@ -83,6 +103,11 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         rightfront.setPower(rightpower);
         rightback.setPower(rightpower);
     }
+    public void motorArmRotate(double Arm_power , double direction){//Turning robot
+        double Armpower = direction * Arm_power;
+        ArmTiltRight.setPower(Armpower);
+        ArmTiltLeft.setPower(Armpower);
+    }
     public void ResetEncoders() throws InterruptedException {
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -90,6 +115,15 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         leftfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         waitCycle(6);
         leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
+        waitCycle(6);
+    }
+    public void ResetArmEncoders() throws InterruptedException {
+        waitCycle(6);
+        ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        waitCycle(6);
+        ArmTiltLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
+        waitCycle(6);
+        ArmTiltLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
     }
     public void waitCycle(int count) throws InterruptedException {
@@ -127,7 +161,7 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         }
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
-       StopDriveMotors();
+        StopDriveMotors();
     }
     public void goTurn(int degrees, double direction, double motor_power) throws InterruptedException {
         int ticks ;
@@ -137,7 +171,7 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
-        motorTurn(motor_power , direction);
+        motorTurn(motor_power, direction);
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         waitCycle(6);
@@ -148,6 +182,25 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
         StopDriveMotors();
+    }
+    public void armRotate(int degrees, int direction, double arm_power) throws InterruptedException {
+        int ticks ;
+        double goal = ((ArmGear1/ArmGear2)*(ArmGear3/ArmGear4))*(CLICKS_PER_REVOLUTION)*degrees/360;//Get ticks for the distance needed to travel
+        ResetArmEncoders();
+        waitCycle(6);
+        ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        waitCycle(6);
+        motorArmRotate(arm_power, direction);
+        waitCycle(6);
+        ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
+        waitCycle(6);
+        ticks = ArmTiltLeft.getCurrentPosition();
+        while(Math.abs(ticks) <= goal){
+            ticks = ArmTiltLeft.getCurrentPosition();
+        }
+        ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+        waitCycle(6);
+        StopArmMotors();
     }
     @Override
     public void runOpMode() throws InterruptedException {
@@ -161,5 +214,3 @@ public abstract class BulletProofOpMode extends LinearOpMode {
         }
     }
 }
-
-
