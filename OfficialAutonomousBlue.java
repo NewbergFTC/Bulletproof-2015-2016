@@ -22,6 +22,8 @@ public class OfficialAutonomousBlue extends BulletProofOpMode {
             sleep(500);
             goForward(36 , 1 , 1); //accelerate into wall
             sleep(500);
+            armRotate(100 , armForward, PowerForward );
+            sleep(500);
             break;
         }
     }
