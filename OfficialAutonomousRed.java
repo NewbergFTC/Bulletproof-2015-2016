@@ -22,7 +22,9 @@ public class OfficialAutonomousRed extends BulletProofOpMode {
             sleep(500);
             goForward(36 , 1 , 1); //accelerate into wall
             sleep(500);
-            break;
+            armRotate(100 , armForward, PowerForward );
+            sleep(500);
+            break; 
         }
     }
 }
