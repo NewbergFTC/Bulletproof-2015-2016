@@ -20,7 +20,7 @@ public class OfficialAutonomousRed extends BulletProofOpMode {
             sleep(500);
             goTurn(30 , LEFT, TURN_POWER);
             sleep(500);
-            goForward(36 , 1 , 1); //accelerate into wall
+            goForward(30 , 1 , 1); //accelerate into wall
             sleep(500);
             armRotate(100 , armForward, PowerForward );
             sleep(500);
