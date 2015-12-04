@@ -1,5 +1,5 @@
-package us.newberg.bullet;
-public class OfficialAutonomousBlue extends BulletProofOpMode {
+package com.qualcomm.ftcrobotcontroller.opmodes;
+public class OfficialAutonomousBlue extends BulletOpMode {
     @Override
     public void initialize() {
     }
@@ -20,12 +20,11 @@ public class OfficialAutonomousBlue extends BulletProofOpMode {
             sleep(500);
             goTurn(30 , RIGHT, TURN_POWER);
             sleep(500);
-            goForward(36 , 1 , 1); //accelerate into wall
+            goForward(30 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT); //accelerate into wall
             sleep(500);
-            armRotate(100 , armForward, PowerForward );
+            armRotate(110 , armForward, PowerForward );
             sleep(500);
             break;
         }
     }
 }
-
