@@ -1,25 +1,21 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
-
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-import com.qualcomm.robotcore.util.Util;
-
-import java.lang.ref.Reference;
-
 public abstract class BulletOpMode extends LinearOpMode {
     public DcMotor leftfront;
     public DcMotor leftback;
     public DcMotor rightfront;
     public DcMotor rightback;
+    public DcMotor ArmTiltLeft;
+    public DcMotor ArmTiltRight;
+    public DcMotor ArmLift;
     public Servo rightArm;
     public Servo leftArm;
     public DcMotorController leftController;
-    public DcMotorController rightController;
-    //Put motors for arms in as well
-    final double LEFT_ARM_OPEN = .5;//need to reverse one of the servos
+    public DcMotorController ArmController;
+    final double LEFT_ARM_OPEN = .5;
     final double LEFT_ARM_CLOSED = 0.0;
     final double RIGHT_ARM_OPEN = 0.5;
     final double RIGHT_ARM_CLOSED = 0.0;
@@ -34,23 +30,21 @@ public abstract class BulletOpMode extends LinearOpMode {
     final double TURN_FACTOR = 2.22;
     final double RIGHT = 1;
     final double LEFT = -1;
-    final double MOTOR_POWER_LEFT = 0.6;
-    final double MOTOR_POWER_RIGHT = 0.35;
-    float count  = 0;
-    final double ArmGear1 = 72;
-    final double ArmGear2 = 20;
-    final double ArmGear3 = 72;
-    final double ArmGear4 = 34;
-    DcMotor ArmTiltLeft;
-    DcMotor ArmTiltRight;
-    DcMotor ArmLift;
+    final double MOTOR_POWER_LEFT = 0.9;
+    final double MOTOR_POWER_RIGHT = 0.65;
+    final double ARM_GEAR_1 = 72;
+    final double ARM_GEAR_2 = 20;
+    final double ARM_GEAR_3 = 72;
+    final double ARM_GEAR_4 = 34;
+    final double ArmStop = 0;
     final int armForward = 1;
     final int armBack = -1;
-    public DcMotorController ArmController;
-    final double PowerForward = .2;
-    final double PowerBack = -.2;
-    final double ArmStop = 0;
-    protected final void Init() throws InterruptedException {   //Sets up motor configurations, etc.
+    final float ARM_POWER_FORWARD = (float) .1;
+    final float ARM_POWER_BACK = (float) -.1;
+    float PowerForward;
+    float PowerBack;
+    //float count  = 0;
+    protected final void Init() throws InterruptedException {
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
@@ -58,30 +52,26 @@ public abstract class BulletOpMode extends LinearOpMode {
         leftback = hardwareMap.dcMotor.get("lb");
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
+        ArmController = hardwareMap.dcMotorController.get("ArmController");
+        leftController = hardwareMap.dcMotorController.get("leftController");
+        leftArm = hardwareMap.servo.get("leftArm");
+        rightArm = hardwareMap.servo.get("rightArm");
         rightback.setDirection(DcMotor.Direction.REVERSE);
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
-        leftArm = hardwareMap.servo.get("leftArm");
-        rightArm = hardwareMap.servo.get("rightArm");
         rightArm.setPosition(RIGHT_ARM_CLOSED);
         leftArm.setPosition(LEFT_ARM_CLOSED);
-        ArmController = hardwareMap.dcMotorController.get("ArmController");
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
         ArmTiltLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        //_frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         waitCycle(6);
         ArmTiltLeft.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        //_frontRight.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
-        leftController = hardwareMap.dcMotorController.get("leftController");
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
         leftfront.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
-        //_frontRight.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
         waitCycle(6);
         leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
-        //_frontRight.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
     }
     public int GetTicks() throws InterruptedException { //gets the current value of the encoder
@@ -198,7 +188,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     }
     public void armRotate(int degrees, int direction, double arm_power) throws InterruptedException {
         int ticks ;
-        double goal = ((ArmGear1/ArmGear2)*(ArmGear3/ArmGear4))*(CLICKS_PER_REVOLUTION)*degrees/360;//Get ticks for the distance needed to travel
+        double goal = ((ARM_GEAR_1/ARM_GEAR_2)*(ARM_GEAR_3/ARM_GEAR_4))*(CLICKS_PER_REVOLUTION)*degrees/360;//Get ticks for the distance needed to travel
         ResetArmEncoders();
         waitCycle(6);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -218,7 +208,6 @@ public abstract class BulletOpMode extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
         Init();
-        // Call subclass init
         initialize();
         waitForStart();
         while (opModeIsActive()) {
