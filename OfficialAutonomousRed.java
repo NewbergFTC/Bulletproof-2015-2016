@@ -12,16 +12,22 @@ public class OfficialAutonomousRed extends BulletProofMode {
         waitForStart();
         while (opModeIsActive()) {
             JohnCena.start();
-            goForward(42 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 30);
+            if (goForward(42 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
+                return;
+
             sleep(500);
-            goTurn(33 , LEFT, TURN_POWER);
+            goTurn(33, LEFT, TURN_POWER);
             // goForward(20, MOTOR_POWER);
             sleep(500);
-            goForward(40 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 30);
+            if ( goForward(40 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
+                return;
+
             sleep(500);
-            goTurn(30 , LEFT, TURN_POWER);
+            goTurn(30, LEFT, TURN_POWER);
             sleep(500);
-            goForward(36 , 1 , 1 , 30); //accelerate into wall
+            if (goForward(36 , 1 , 1 , 3500)) //accelerate into wall
+                return;
+
             sleep(500);
             //armRotate(100 , armForward, PowerForward );
             //sleep(500);
