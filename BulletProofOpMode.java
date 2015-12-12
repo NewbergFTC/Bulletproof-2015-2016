@@ -1,9 +1,15 @@
 package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
 
+import android.content.Context;
+import android.media.MediaPlayer;
+import android.net.Uri;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import java.io.File;
 
 /**
  * Created by Bullet Proof on 12/11/2015.
@@ -48,6 +54,9 @@ public abstract class BulletProofMode extends LinearOpMode {
         final float ARM_POWER_BACK = (float) -.1;
         float PowerForward;
         float PowerBack;
+        public static Context CONTEXT;
+        public MediaPlayer JohnCena;
+
         //float count  = 0;
         protected final void Init() throws InterruptedException {
             ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
@@ -78,6 +87,9 @@ public abstract class BulletProofMode extends LinearOpMode {
             waitCycle(6);
             leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             waitCycle(6);
+
+            JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
+            JohnCena.setVolume(1, 1);
         }
         public int GetTicks() throws InterruptedException { //gets the current value of the encoder
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
@@ -151,7 +163,7 @@ public abstract class BulletProofMode extends LinearOpMode {
         }
         public abstract void initialize();
         public abstract void Update();
-        public void goForward(int inches , double leftPower , double rightPower) throws InterruptedException {
+        public boolean goForward(int inches , double leftPower , double rightPower, long delay) throws InterruptedException {
             double goal = (GEAR_TWO_TEETH/GEAR_ONE_TEETH)*(CLICKS_PER_REVOLUTION/WHEEL_CIRCUMFERENCE)*inches;//Get ticks for the distance needed to travel
             goal = (goal - GOAL_DIFFERENCE) * DISTANCE_FACTOR;
             ResetEncoders();//Puts program in read only inside the routine
@@ -159,17 +171,29 @@ public abstract class BulletProofMode extends LinearOpMode {
             int ticks ;
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
             waitCycle(6);
-            motorPowerRampUp(leftPower , rightPower);
+            motorPowerRampUp(leftPower, rightPower);
             waitCycle(6);
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
             waitCycle(6);
             ticks = leftfront.getCurrentPosition();
+            WatchDog dog = new WatchDog(this, delay);
+            dog.start();
             while(ticks <= goal){
                 ticks = leftfront.getCurrentPosition();
+
+                if (!dog.GetRunning()) {
+                    leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
+                    waitCycle(6);
+                    StopDriveMotors();
+
+                    return true;
+                }
             }
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
             waitCycle(6);
             StopDriveMotors();
+
+            return false;
         }
         public void goTurn(int degrees, double direction, double motor_power) throws InterruptedException {
             int ticks ;
@@ -221,4 +245,5 @@ public abstract class BulletProofMode extends LinearOpMode {
             }
         }
 }
+
 
