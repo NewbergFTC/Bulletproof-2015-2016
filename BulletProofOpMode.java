@@ -4,16 +4,13 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
+import com.qualcomm.hardware.HiTechnicNxtTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import java.io.File;
 
-/**
- * Created by Bullet Proof on 12/11/2015.
- */
 public abstract class BulletProofMode extends LinearOpMode {
         public DcMotor leftfront;
         public DcMotor leftback;
@@ -24,6 +21,9 @@ public abstract class BulletProofMode extends LinearOpMode {
         public DcMotor ArmLift;
         public Servo rightArm;
         public Servo leftArm;
+        public Servo Skirtservo;
+        public Servo LowerArmLock;
+        public Servo UpperArmLock;
         public DcMotorController leftController;
         public DcMotorController ArmController;
         final double LEFT_ARM_OPEN = .5;
@@ -54,8 +54,16 @@ public abstract class BulletProofMode extends LinearOpMode {
         final float ARM_POWER_BACK = (float) -.1;
         float PowerForward;
         float PowerBack;
+        double SERVO_POSITION_UP = 0.5;
+        double SERVO_POSITION_DOWN= 0;
+        double LowerArmLocked = 0;
+        double LowerArmUnlocked = .5;
+        double UpperArmLocked = 0;
+        double UpperArmUnlocked = .5;
+
         public static Context CONTEXT;
         public MediaPlayer JohnCena;
+        HiTechnicNxtTouchSensor ArmReset;
 
         //float count  = 0;
         protected final void Init() throws InterruptedException {
@@ -70,6 +78,9 @@ public abstract class BulletProofMode extends LinearOpMode {
             leftController = hardwareMap.dcMotorController.get("leftController");
             leftArm = hardwareMap.servo.get("leftArm");
             rightArm = hardwareMap.servo.get("rightArm");
+            Skirtservo = hardwareMap.servo.get("Skirtservo");
+            LowerArmLock = hardwareMap.servo.get("LowerArmLock");
+            UpperArmLock = hardwareMap.servo.get("UpperArmLock");
             rightback.setDirection(DcMotor.Direction.REVERSE);
             rightfront.setDirection(DcMotor.Direction.REVERSE);
             ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -99,6 +110,30 @@ public abstract class BulletProofMode extends LinearOpMode {
             waitCycle(6);
             return position;
         }
+        public void SkirtServo(){
+            if (gamepad2.dpad_up) {
+                Skirtservo.setPosition(SERVO_POSITION_UP);
+            }
+            if (gamepad2.dpad_down){
+                Skirtservo.setPosition(SERVO_POSITION_DOWN);
+            }
+        }
+        public void LowerArmLock(){
+            if(gamepad1.a){
+                LowerArmLock.setPosition(LowerArmLocked);
+            }
+            if(gamepad1.b){
+                LowerArmLock.setPosition(LowerArmUnlocked);
+            }
+        }
+        public void UpperArmLock(){
+            if(gamepad1.x){
+                UpperArmLock.setPosition(UpperArmLocked);
+            }
+            if(gamepad1.y){
+                UpperArmLock.setPosition(UpperArmUnlocked);
+            }
+        }
         public void motorDrive(float motorPower){  //Driving forward
             leftfront.setPower(motorPower);
             rightfront.setPower(motorPower);
@@ -123,6 +158,7 @@ public abstract class BulletProofMode extends LinearOpMode {
             rightfront.setPower(rightpower);
             rightback.setPower(rightpower);
         }
+
         public void motorArmRotate(double Arm_power , double direction){//Turning robot
             double Armpower = direction * Arm_power;
             ArmTiltRight.setPower(Armpower);
@@ -159,6 +195,23 @@ public abstract class BulletProofMode extends LinearOpMode {
                 rightback.setPower(rightPower / i);
                 sleep(250);
 
+            }
+        }
+        public void TouchSensor() throws InterruptedException{
+            ArmReset = (HiTechnicNxtTouchSensor) hardwareMap.touchSensor.get("TouchSensor");
+            String  touchValue;
+
+            waitForStart();
+
+            while(opModeIsActive()){
+                if (ArmReset.isPressed()) {
+                    touchValue = "Yes";
+                    ArmTiltLeft.setPower(1);//if motors aren't attached it won't work
+                    ArmTiltRight.setPower(1);
+                }else {
+                    touchValue = "No";
+                }
+                telemetry.addData("Is it pressed?", touchValue);
             }
         }
         public abstract void initialize();
@@ -245,5 +298,6 @@ public abstract class BulletProofMode extends LinearOpMode {
             }
         }
 }
+
 
 
