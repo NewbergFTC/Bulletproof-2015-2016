@@ -1,71 +1,70 @@
 package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
-
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
-
 import com.qualcomm.hardware.HiTechnicNxtTouchSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.io.File;
-
 public abstract class BulletProofMode extends LinearOpMode {
-        public DcMotor leftfront;
-        public DcMotor leftback;
-        public DcMotor rightfront;
-        public DcMotor rightback;
-        public DcMotor ArmTiltLeft;
-        public DcMotor ArmTiltRight;
-        public DcMotor ArmLift;
-        public Servo rightArm;
-        public Servo leftArm;
-        public Servo Skirtservo;
-        public Servo LowerArmLock;
-        public Servo UpperArmLock;
-        public DcMotorController leftController;
-        public DcMotorController ArmController;
-        final double LEFT_ARM_OPEN = .5;
-        final double LEFT_ARM_CLOSED = 0.0;
-        final double RIGHT_ARM_OPEN = 0.5;
-        final double RIGHT_ARM_CLOSED = 0.0;
-        final double GEAR_ONE_TEETH = 16;
-        final double GEAR_TWO_TEETH = 30;
-        final double CLICKS_PER_REVOLUTION = 1120;
-        final double WHEEL_CIRCUMFERENCE = 7 * Math.PI;
-        final double MOTOR_POWER = .5;
-        final double TURN_POWER = 0.5;
-        final double GOAL_DIFFERENCE = 100;
-        final double DISTANCE_FACTOR = 0.89;
-        final double TURN_FACTOR = 2.22;
-        final double RIGHT = 1;
-        final double LEFT = -1;
-        final double MOTOR_POWER_LEFT = 0.9;
-        final double MOTOR_POWER_RIGHT = 0.65;
-        final double ARM_GEAR_1 = 72;
-        final double ARM_GEAR_2 = 20;
-        final double ARM_GEAR_3 = 72;
-        final double ARM_GEAR_4 = 34;
-        final double ArmStop = 0;
-        final int armForward = 1;
-        final int armBack = -1;
-        final float ARM_POWER_FORWARD = (float) .1;
-        final float ARM_POWER_BACK = (float) -.1;
-        float PowerForward;
-        float PowerBack;
-        double SERVO_POSITION_UP = 0.5;
-        double SERVO_POSITION_DOWN= 0;
-        double LowerArmLocked = 0;
-        double LowerArmUnlocked = .5;
-        double UpperArmLocked = 0;
-        double UpperArmUnlocked = .5;
-
-        public static Context CONTEXT;
-        public MediaPlayer JohnCena;
-        HiTechnicNxtTouchSensor ArmReset;
-
-        //float count  = 0;
+    public DcMotor leftfront;
+    public DcMotor leftback;
+    public DcMotor rightfront;
+    public DcMotor rightback;
+    public DcMotor ArmTiltLeft;
+    public DcMotor ArmTiltRight;
+    public DcMotor ArmLift;
+    public Servo rightArm;
+    public Servo leftArm;
+    public Servo SkirtServo;
+    public Servo LowerArmLock;
+    public Servo UpperArmLock;
+    private Servo Zipline;
+    public DcMotorController leftController;
+    public DcMotorController ArmController;
+    final double LEFT_ARM_OPEN = .5;
+    final double LEFT_ARM_CLOSED = 0.0;
+    final double RIGHT_ARM_OPEN = 0.5;
+    final double RIGHT_ARM_CLOSED = 0.0;
+    final double GEAR_ONE_TEETH = 16;
+    final double GEAR_TWO_TEETH = 30;
+    final double CLICKS_PER_REVOLUTION = 1120;
+    final double WHEEL_CIRCUMFERENCE = 7 * Math.PI;
+    final double MOTOR_POWER = .5;
+    final double TURN_POWER = 0.5;
+    final double GOAL_DIFFERENCE = 100;
+    final double DISTANCE_FACTOR = 0.89;
+    final double TURN_FACTOR = 2.22;
+    final double RIGHT = 1;
+    final double LEFT = -1;
+    final double MOTOR_POWER_LEFT = 0.9;
+    final double MOTOR_POWER_RIGHT = 0.65;
+    final double ARM_GEAR_1 = 72;
+    final double ARM_GEAR_2 = 20;
+    final double ARM_GEAR_3 = 72;
+    final double ARM_GEAR_4 = 34;
+    final double ArmStop = 0;
+    final int armForward = 1;
+    final int armBack = -1;
+    final float ARM_POWER_FORWARD = (float) .1;
+    final float ARM_POWER_BACK = (float) -.1;
+    float PowerForward;
+    float PowerBack;
+    final static double SERVO_SKIRT_UP = 0.67;
+    final static double SERVO_SKIRT_DOWN= .53;
+    final static double LOWER_ARM_LEFT = .6;
+    final static double LOWER_ARM_RIGHT = .4;
+    final static double LOWER_ARM_OFF = .5;
+    final static double UPPER_ARM_LOCKED = .69;
+    final static double UPPER_ARM_UNLOCKED = .4;
+    final static double ZIPLINE_UP = .6;
+    final static double ZIPLINE_DOWN = .23 ;
+    public static Context CONTEXT;
+    public MediaPlayer JohnCena;
+    HiTechnicNxtTouchSensor ArmReset;
+    //float count  = 0;
         protected final void Init() throws InterruptedException {
             ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
             ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
@@ -76,16 +75,17 @@ public abstract class BulletProofMode extends LinearOpMode {
             rightback = hardwareMap.dcMotor.get("rb");
             ArmController = hardwareMap.dcMotorController.get("ArmController");
             leftController = hardwareMap.dcMotorController.get("leftController");
-            leftArm = hardwareMap.servo.get("leftArm");
-            rightArm = hardwareMap.servo.get("rightArm");
-            Skirtservo = hardwareMap.servo.get("Skirtservo");
+            //leftArm = hardwareMap.servo.get("leftArm");
+            //rightArm = hardwareMap.servo.get("rightArm");
+            SkirtServo = hardwareMap.servo.get("Skirtservo");
             LowerArmLock = hardwareMap.servo.get("LowerArmLock");
             UpperArmLock = hardwareMap.servo.get("UpperArmLock");
+            Zipline = hardwareMap.servo.get("Zipline");
             rightback.setDirection(DcMotor.Direction.REVERSE);
             rightfront.setDirection(DcMotor.Direction.REVERSE);
             ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
-            rightArm.setPosition(RIGHT_ARM_CLOSED);
-            leftArm.setPosition(LEFT_ARM_CLOSED);
+            //rightArm.setPosition(RIGHT_ARM_CLOSED);
+            //leftArm.setPosition(LEFT_ARM_CLOSED);
             ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
             waitCycle(6);
             ArmTiltLeft.setChannelMode(DcMotorController.RunMode.RESET_ENCODERS);
@@ -98,6 +98,9 @@ public abstract class BulletProofMode extends LinearOpMode {
             waitCycle(6);
             leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
             waitCycle(6);
+            SkirtServo.setPosition(SERVO_SKIRT_DOWN);
+            UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
+            Zipline.setPosition(ZIPLINE_UP);
 
             JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
             JohnCena.setVolume(1, 1);
@@ -109,30 +112,6 @@ public abstract class BulletProofMode extends LinearOpMode {
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
             waitCycle(6);
             return position;
-        }
-        public void SkirtServo(){
-            if (gamepad2.dpad_up) {
-                Skirtservo.setPosition(SERVO_POSITION_UP);
-            }
-            if (gamepad2.dpad_down){
-                Skirtservo.setPosition(SERVO_POSITION_DOWN);
-            }
-        }
-        public void LowerArmLock(){
-            if(gamepad1.a){
-                LowerArmLock.setPosition(LowerArmLocked);
-            }
-            if(gamepad1.b){
-                LowerArmLock.setPosition(LowerArmUnlocked);
-            }
-        }
-        public void UpperArmLock(){
-            if(gamepad1.x){
-                UpperArmLock.setPosition(UpperArmLocked);
-            }
-            if(gamepad1.y){
-                UpperArmLock.setPosition(UpperArmUnlocked);
-            }
         }
         public void motorDrive(float motorPower){  //Driving forward
             leftfront.setPower(motorPower);
@@ -158,7 +137,6 @@ public abstract class BulletProofMode extends LinearOpMode {
             rightfront.setPower(rightpower);
             rightback.setPower(rightpower);
         }
-
         public void motorArmRotate(double Arm_power , double direction){//Turning robot
             double Armpower = direction * Arm_power;
             ArmTiltRight.setPower(Armpower);
@@ -194,7 +172,6 @@ public abstract class BulletProofMode extends LinearOpMode {
                 rightfront.setPower(rightPower / i);
                 rightback.setPower(rightPower / i);
                 sleep(250);
-
             }
         }
         public void TouchSensor() throws InterruptedException{
@@ -233,19 +210,16 @@ public abstract class BulletProofMode extends LinearOpMode {
             dog.start();
             while(ticks <= goal){
                 ticks = leftfront.getCurrentPosition();
-
                 if (!dog.GetRunning()) {
                     leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
                     waitCycle(6);
                     StopDriveMotors();
-
                     return true;
                 }
             }
             leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
             waitCycle(6);
             StopDriveMotors();
-
             return false;
         }
         public void goTurn(int degrees, double direction, double motor_power) throws InterruptedException {
@@ -298,6 +272,5 @@ public abstract class BulletProofMode extends LinearOpMode {
             }
         }
 }
-
 
 
