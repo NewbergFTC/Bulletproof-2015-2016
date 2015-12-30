@@ -52,9 +52,11 @@ public class OfficialTeleOp extends OpMode{
     public void loop(){
         float leftY = -gamepad1.left_stick_y;
         float rightY = -gamepad1.right_stick_y;
+        float frontleftpower = (leftY * 0.6);
+        float frontrightpower = (righty * 0.6);
 
-        leftfront.setPower(leftY);
-        rightfront.setPower(rightY);
+        leftfront.setPower(frontleftpower);
+        rightfront.setPower(rightfrontpower);
         leftback.setPower(leftY);
         rightback.setPower(rightY);
 
