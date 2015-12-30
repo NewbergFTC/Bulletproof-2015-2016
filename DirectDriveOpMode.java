@@ -41,8 +41,8 @@ public abstract class BulletProofMode extends LinearOpMode {
     final double ARM_GEAR_4 = 34;
     final double FRONT_WHEEL_RATIO = 1.8;
     final double BACK_WHEEL_RATIO = 1;
-    final double LEFT_FRONT_POWER = (1.8 * 0.9);
-    final double RIGHT_FRONT_POWER = (1.8 * 0.65);
+    final double LEFT_FRONT_POWER = (0.6 * 0.9);
+    final double RIGHT_FRONT_POWER = (0.6 * 0.65);
     final double LEFT_BACK_POWER = 0.9;
     final double RIGHT_BACK_POWER = 0.65;
     final double ArmStop = 0;
