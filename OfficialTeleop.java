@@ -33,7 +33,6 @@ public class OfficialTeleOp extends OpMode{
         leftback = hardwareMap.dcMotor.get("lb");
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
-        rightback.setDirection(DcMotor.Direction.REVERSE);
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
@@ -50,13 +49,15 @@ public class OfficialTeleOp extends OpMode{
     }
     @Override
     public void loop(){
-        float leftY = -gamepad1.left_stick_y;
+        float leftY = gamepad1.left_stick_y;
         float rightY = -gamepad1.right_stick_y;
-        float frontleftpower = (leftY * 0.9);
-        float frontrightpower = (righty * 0.9);
+        double backleftpower = (leftY );
+        double backrightpower = (rightY );
+        double frontleftpower = (leftY * -.9);
+        double frontrightpower = (rightY * .9);
 
         leftfront.setPower(frontleftpower);
-        rightfront.setPower(rightfrontpower);
+        rightfront.setPower(frontrightpower);
         leftback.setPower(leftY);
         rightback.setPower(rightY);
 
@@ -78,7 +79,7 @@ public class OfficialTeleOp extends OpMode{
         }
 
         LowerArmLock.setPosition( gamepad1.a ? LOWER_ARM_RIGHT :
-                                  gamepad1.b ? LOWER_ARM_LEFT : LOWER_ARM_OFF);
+                gamepad1.b ? LOWER_ARM_LEFT : LOWER_ARM_OFF);
 
         if(gamepad1.x){
             UpperArmLock.setPosition(UPPER_ARM_LOCKED);
