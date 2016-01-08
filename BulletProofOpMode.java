@@ -41,10 +41,10 @@ public abstract class BulletProofMode extends LinearOpMode {
     final double ARM_GEAR_4 = 34;
     final double FRONT_WHEEL_RATIO = 1.8;
     final double BACK_WHEEL_RATIO = 1;
-    final double LEFT_FRONT_POWER = .45;
-    final double RIGHT_FRONT_POWER = .45;
-    final double LEFT_BACK_POWER = 0.5;
-    final double RIGHT_BACK_POWER = 0.5;
+    final double LEFT_FRONT_POWER = .12  ;
+    final double RIGHT_FRONT_POWER = .12;
+    final double LEFT_BACK_POWER = .1;
+    final double RIGHT_BACK_POWER = .1;
     final double ArmStop = 0;
     final int armForward = 1;
     final int armBack = -1;
@@ -52,15 +52,15 @@ public abstract class BulletProofMode extends LinearOpMode {
     final float ARM_POWER_BACK = (float) -.1;
     float PowerForward;
     float PowerBack;
-    final static double SERVO_SKIRT_UP = 0.67;
-    final static double SERVO_SKIRT_DOWN= .53;
+    final static double SERVO_SKIRT_UP = 0.54 ;
+    final static double SERVO_SKIRT_DOWN= .38;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
     final static double UPPER_ARM_LOCKED = .69;
-    final static double UPPER_ARM_UNLOCKED = .4;
+    final static double UPPER_ARM_UNLOCKED = .1;
     final static double ZIPLINE_UP = .6;
-    final static double ZIPLINE_DOWN = .23 ;
+    final static double ZIPLINE_DOWN = .23;
     public static Context CONTEXT;
     public MediaPlayer JohnCena;
     //HiTechnicNxtTouchSensor ArmReset;
@@ -79,8 +79,7 @@ public abstract class BulletProofMode extends LinearOpMode {
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
-        rightback.setDirection(DcMotor.Direction.REVERSE);
-        rightfront.setDirection(DcMotor.Direction.REVERSE);
+        leftback.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
@@ -96,10 +95,9 @@ public abstract class BulletProofMode extends LinearOpMode {
         waitCycle(6);
         SkirtServo.setPosition(SERVO_SKIRT_DOWN);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
-        Zipline.setPosition(ZIPLINE_UP);
-
-        JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
-        JohnCena.setVolume(1, 1);
+        Zipline.setPosition(ZIPLINE_UP);//fix left front0
+        //JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
+        //JohnCena.setVolume(1, 1);
     }
     public int GetTicks() throws InterruptedException { //gets the current value of the encoder
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
@@ -270,4 +268,3 @@ public abstract class BulletProofMode extends LinearOpMode {
         }
     }
 }
-
