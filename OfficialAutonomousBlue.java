@@ -12,22 +12,16 @@ public class OfficialAutonomousBlue extends BulletProofMode {
         waitForStart();
         while (opModeIsActive()) {
             JohnCena.start();
-            if (goForward(42 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
-                return;
-
-            sleep(500);
-            goTurn(33 , RIGHT, TURN_POWER);
+            goForward(42 , LEFT_FRONT_POWER ,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,5000);
+            sleep(10000);
+            goTurn(33 , RIGHT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             // goForward(20, MOTOR_POWER);
             sleep(500);
-            if ( goForward(40 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
-                return;
-
+            goForward(40 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,5000);
             sleep(500);
-            goTurn(30 , RIGHT, TURN_POWER);
+            goTurn(30 , RIGHT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(36 , 1 , 1 , 3500)) //accelerate into wall
-                return;
-
+            goForward(36 , .9 , .9 , 1 , 1 , 5000); //accelerate into wall
             sleep(500);
             //armRotate(100 , armForward, PowerForward );
             //sleep(500);
@@ -35,5 +29,3 @@ public class OfficialAutonomousBlue extends BulletProofMode {
         }
     }
 }
-
-
