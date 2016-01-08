@@ -18,13 +18,13 @@ public class OfficialTeleOp extends OpMode{
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
     final static float LIFT_POWER_BACK = -1;
-    final static double SERVO_SKIRT_UP = 0.67;
-    final static double SERVO_SKIRT_DOWN= .53;
+    final static double SERVO_SKIRT_UP = .54;
+    final static double SERVO_SKIRT_DOWN= .38;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = .69;
-    final static double UPPER_ARM_UNLOCKED = .4;
+    final static double UPPER_ARM_LOCKED = .026;
+    final static double UPPER_ARM_UNLOCKED = .1;
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23 ;
     @Override
@@ -37,7 +37,7 @@ public class OfficialTeleOp extends OpMode{
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
         ArmLift.setDirection(DcMotor.Direction.REVERSE);
-        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
+        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);//sterling is retarted
         SkirtServo = hardwareMap.servo.get("Skirtservo");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         LowerArmLock.setDirection(Servo.Direction.REVERSE);
@@ -50,18 +50,18 @@ public class OfficialTeleOp extends OpMode{
     public void loop(){
         float leftY = gamepad1.left_stick_y;
         float rightY = -gamepad1.right_stick_y;
-        double backleftpower = (leftY );
-        double backrightpower = (rightY );
-        double frontleftpower = (leftY * -.9);
-        double frontrightpower = (rightY * .9);
+        double backleftpower = (leftY ) * .4;
+        double backrightpower = (rightY ) * .4;
+        double frontleftpower = (leftY * -.9 * .4);
+        double frontrightpower = (rightY * .9)* .4;
 
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
-        leftback.setPower(leftY);
-        rightback.setPower(rightY);
+        leftback.setPower(backleftpower);
+        rightback.setPower(backrightpower);
 
-        PowerForward = (gamepad2.a)? 1 : (float) 0.1;
-        PowerBack = (gamepad2.a)? -1 : (float) -0.1;
+        PowerForward = (gamepad2.a)? -1 : (float) -0.2;
+        PowerBack = (gamepad2.a)? 1 : (float) 0.2;
 
         float armPower = (gamepad2.left_trigger >= 0.05) ? PowerForward : (gamepad2.right_trigger >= 0.05) ? PowerBack : 0;
         ArmTiltLeft.setPower(armPower);
