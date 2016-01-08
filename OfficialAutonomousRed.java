@@ -11,27 +11,26 @@ public class OfficialAutonomousRed extends BulletProofMode {
         super.Init();
         waitForStart();
         while (opModeIsActive()) {
-            JohnCena.start();
-            if (goForward(42 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
-                return;
+            //JohnCena.start();
 
-            sleep(500);
-            goTurn(33, LEFT, TURN_POWER);
+            if (goForward(42 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,3500 ))
+                return;
+            sleep(10000);
+            goTurn(38, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             // goForward(20, MOTOR_POWER);
             sleep(500);
-            if ( goForward(40 , MOTOR_POWER_LEFT , MOTOR_POWER_RIGHT , 3500))
+            if (goForward(40 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,3500))
                 return;
-
             sleep(500);
-            goTurn(30, LEFT, TURN_POWER);
+            goTurn(41, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(36 , 1 , 1 , 3500)) //accelerate into wall
-                return;
-
+            if (goForward(36 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
+             return;//accelerate into wall
             sleep(500);
             //armRotate(100 , armForward, PowerForward );
             //sleep(500);
             break;
+
         }
     }
 }
