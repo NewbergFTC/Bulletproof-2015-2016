@@ -1,0 +1,28 @@
+package com.qualcomm.ftcrobotcontroller.opmodes;
+
+import com.qualcomm.ftcrobotcontroller.opmodes.BulletOpMode;
+
+public class StraightAutonomous extends BulletOpMode {
+    @Override
+    public void initialize() {
+    }
+
+    @Override
+    public void Update() {
+    }
+
+    @Override
+    public void runOpMode() throws InterruptedException {
+        super.Init();
+        waitForStart();
+        while (opModeIsActive()) {
+            if (goForward(5, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 1000))
+                return;
+            sleep(5000);
+            if (goForward(90, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER,12000))
+                return;
+
+            break;
+        }
+    }
+}
