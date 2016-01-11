@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+package com.qualcomm.ftcrobotcontroller.opmodes;
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.io.File;
-public abstract class BulletProofMode extends LinearOpMode {
+public abstract class BulletOpMode extends LinearOpMode {
     public DcMotor leftfront;
     public DcMotor leftback;
     public DcMotor rightfront;
@@ -41,10 +41,10 @@ public abstract class BulletProofMode extends LinearOpMode {
     final double ARM_GEAR_4 = 34;
     final double FRONT_WHEEL_RATIO = 1.8;
     final double BACK_WHEEL_RATIO = 1;
-    final double LEFT_FRONT_POWER = .12  ;
-    final double RIGHT_FRONT_POWER = .12;
-    final double LEFT_BACK_POWER = .1;
-    final double RIGHT_BACK_POWER = .1;
+    final double LEFT_FRONT_POWER = .165  ;
+    final double RIGHT_FRONT_POWER = .165;
+    final double LEFT_BACK_POWER = .15;
+    final double RIGHT_BACK_POWER = .15;
     final double ArmStop = 0;
     final int armForward = 1;
     final int armBack = -1;
@@ -80,6 +80,7 @@ public abstract class BulletProofMode extends LinearOpMode {
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
         leftback.setDirection(DcMotor.Direction.REVERSE);
+        rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
@@ -267,4 +268,4 @@ public abstract class BulletProofMode extends LinearOpMode {
             waitForNextHardwareCycle();
         }
     }
-} /
+}
