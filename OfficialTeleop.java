@@ -1,4 +1,4 @@
-package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+package com.qualcomm.ftcrobotcontroller.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -53,7 +53,7 @@ public class OfficialTeleOp extends OpMode{
         double backleftpower = (leftY ) * .4;
         double backrightpower = (rightY ) * .4;
         double frontleftpower = (leftY * -.9 * .4);
-        double frontrightpower = (rightY * .9)* .4;
+        double frontrightpower = (rightY * -.9)* .4;
 
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
