@@ -1,5 +1,8 @@
-package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
-public class OfficialAutonomousRed extends BulletProofMode {
+package com.qualcomm.ftcrobotcontroller.opmodes;
+
+import com.qualcomm.ftcrobotcontroller.opmodes.BulletOpMode;
+
+public class OfficialAutonomousRed extends BulletOpMode {
     @Override
     public void initialize() {
     }
@@ -12,20 +15,22 @@ public class OfficialAutonomousRed extends BulletProofMode {
         waitForStart();
         while (opModeIsActive()) {
             //JohnCena.start();
-
-            if (goForward(42 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,3500 ))
+            if(goForward(5,LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,1000))
                 return;
-            sleep(10000);
-            goTurn(38, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
+            sleep(9000);
+            if (goForward(37 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,3500 ))
+                return;
+            sleep(500);
+            goTurn(64, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             // goForward(20, MOTOR_POWER);
             sleep(500);
-            if (goForward(40 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,3500))
+            if (goForward(42 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,3500))
                 return;
             sleep(500);
-            goTurn(41, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
+            goTurn(58, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(36 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
-             return;//accelerate into wall
+            if (goForward(45 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
+                return;//accelerate into wall
             sleep(500);
             //armRotate(100 , armForward, PowerForward );
             //sleep(500);
