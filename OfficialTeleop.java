@@ -10,7 +10,8 @@ public class OfficialTeleOp extends OpMode{
     private DcMotor ArmTiltLeft;
     private DcMotor ArmTiltRight;
     private DcMotor ArmLift;
-    private Servo SkirtServo;
+    private Servo SkirtServoR;
+    private Servo SkirtServoL;
     private Servo LowerArmLock;
     private Servo UpperArmLock;
     private Servo Zipline;
@@ -18,8 +19,10 @@ public class OfficialTeleOp extends OpMode{
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
     final static float LIFT_POWER_BACK = -1;
-    final static double SERVO_SKIRT_UP = .54;
-    final static double SERVO_SKIRT_DOWN= .38;
+    final static double SERVO_SKIRT_UPR = .54;
+    final static double SERVO_SKIRT_DOWNR= .38;
+    final static double SERVO_SKIRT_UPL = .54;
+    final static double SERVO_SKIRT_DOWNL= .38;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
@@ -38,12 +41,14 @@ public class OfficialTeleOp extends OpMode{
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
         ArmLift.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);//sterling is retarted
-        SkirtServo = hardwareMap.servo.get("Skirtservo");
+        SkirtServoR = hardwareMap.servo.get("SkirtservoR");
+        SkirtServoL = hardwareMap.servo.get("SkirtservoL");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         LowerArmLock.setDirection(Servo.Direction.REVERSE);
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
-        SkirtServo.setPosition(SERVO_SKIRT_DOWN);
+        SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
+        SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
     }
     @Override
@@ -71,10 +76,13 @@ public class OfficialTeleOp extends OpMode{
         ArmLift.setPower(extendPower);
 
         if (gamepad1.dpad_up){
-            SkirtServo.setPosition(SERVO_SKIRT_UP);
+            SkirtServoR.setPosition(SERVO_SKIRT_UPR);
+            SkirtServoL.setPosition(SERVO_SKIRT_UPL);
+
         }
         if (gamepad1.dpad_down){
-            SkirtServo.setPosition(SERVO_SKIRT_DOWN);
+            SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
+            SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         }
 
         LowerArmLock.setPosition( gamepad1.a ? LOWER_ARM_RIGHT :
