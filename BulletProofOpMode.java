@@ -16,7 +16,8 @@ public abstract class BulletOpMode extends LinearOpMode {
     public DcMotor ArmTiltLeft;
     public DcMotor ArmTiltRight;
     public DcMotor ArmLift;
-    public Servo SkirtServo;
+    public Servo SkirtServoR;
+    public Servo SkirtServoL;
     public Servo LowerArmLock;
     public Servo UpperArmLock;
     private Servo Zipline;
@@ -41,7 +42,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     final double ARM_GEAR_4 = 34;
     final double FRONT_WHEEL_RATIO = 1.8;
     final double BACK_WHEEL_RATIO = 1;
-    final double LEFT_FRONT_POWER = .165  ;
+    final double LEFT_FRONT_POWER = .165;
     final double RIGHT_FRONT_POWER = .165;
     final double LEFT_BACK_POWER = .15;
     final double RIGHT_BACK_POWER = .15;
@@ -52,8 +53,11 @@ public abstract class BulletOpMode extends LinearOpMode {
     final float ARM_POWER_BACK = (float) -.1;
     float PowerForward;
     float PowerBack;
-    final static double SERVO_SKIRT_UP = 0.54 ;
-    final static double SERVO_SKIRT_DOWN= .38;
+    final static double SERVO_SKIRT_UPR = 0.54 ;
+    final static double SERVO_SKIRT_DOWNR= .38;
+    final static double SERVO_SKIRT_UPL = 0.54 ;
+    final static double SERVO_SKIRT_DOWNL= .38;
+
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
@@ -75,7 +79,8 @@ public abstract class BulletOpMode extends LinearOpMode {
         rightback = hardwareMap.dcMotor.get("rb");
         ArmController = hardwareMap.dcMotorController.get("ArmController");
         leftController = hardwareMap.dcMotorController.get("leftController");
-        SkirtServo = hardwareMap.servo.get("Skirtservo");
+        SkirtServoR = hardwareMap.servo.get("SkirtservoR");
+        SkirtServoL = hardwareMap.servo.get("SkirtservoL");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
@@ -94,7 +99,8 @@ public abstract class BulletOpMode extends LinearOpMode {
         waitCycle(6);
         leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
-        SkirtServo.setPosition(SERVO_SKIRT_DOWN);
+        SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
+        SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         Zipline.setPosition(ZIPLINE_UP);//fix left front0
         //JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
