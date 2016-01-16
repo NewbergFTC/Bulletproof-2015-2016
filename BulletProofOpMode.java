@@ -53,11 +53,10 @@ public abstract class BulletOpMode extends LinearOpMode {
     final float ARM_POWER_BACK = (float) -.1;
     float PowerForward;
     float PowerBack;
-    final static double SERVO_SKIRT_UPR = 0.54 ;
-    final static double SERVO_SKIRT_DOWNR= .38;
-    final static double SERVO_SKIRT_UPL = 0.54 ;
-    final static double SERVO_SKIRT_DOWNL= .38;
-
+    final static double SERVO_SKIRT_UPR = .23;
+    final static double SERVO_SKIRT_DOWNR= .1;
+    final static double SERVO_SKIRT_UPL = .23;
+    final static double SERVO_SKIRT_DOWNL= 0.1;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
@@ -66,7 +65,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23;
     public static Context CONTEXT;
-    public MediaPlayer JohnCena;
+    public MediaPlayer Rocky;
     //HiTechnicNxtTouchSensor ArmReset;
     //float count  = 0;
     protected final void Init() throws InterruptedException {
@@ -103,8 +102,8 @@ public abstract class BulletOpMode extends LinearOpMode {
         SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         Zipline.setPosition(ZIPLINE_UP);//fix left front0
-        //JohnCena = MediaPlayer.create(CONTEXT, Uri.fromFile(new File("/mnt/sdcard/cena.mp3")));
-        //JohnCena.setVolume(1, 1);
+        Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
+        Rocky.setVolume(1, 1);
     }
     public int GetTicks() throws InterruptedException { //gets the current value of the encoder
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
