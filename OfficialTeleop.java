@@ -1,7 +1,13 @@
 package com.qualcomm.ftcrobotcontroller.opmodes;
+import android.media.MediaPlayer;
+import android.net.Uri;
+
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+
+import java.io.File;
+
 public class OfficialTeleOp extends OpMode{
     private DcMotor leftfront;
     private DcMotor leftback;
@@ -19,28 +25,31 @@ public class OfficialTeleOp extends OpMode{
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
     final static float LIFT_POWER_BACK = -1;
-    final static double SERVO_SKIRT_UPR = .54;
-    final static double SERVO_SKIRT_DOWNR= .38;
-    final static double SERVO_SKIRT_UPL = .54;
-    final static double SERVO_SKIRT_DOWNL= .38;
+    final static double SERVO_SKIRT_UPR = .23;
+    final static double SERVO_SKIRT_DOWNR= .1;
+    final static double SERVO_SKIRT_UPL = .23;
+    final static double SERVO_SKIRT_DOWNL= 0.1;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = .026;
-    final static double UPPER_ARM_UNLOCKED = .1;
+    final static double UPPER_ARM_LOCKED = .47;
+    final static double UPPER_ARM_UNLOCKED = .25;
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23 ;
+    public MediaPlayer Rocky;
     @Override
     public void init(){
         leftfront = hardwareMap.dcMotor.get("lf");
         leftback = hardwareMap.dcMotor.get("lb");
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
+        rightfront.setDirection(DcMotor.Direction.REVERSE);
+        leftfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
         ArmLift.setDirection(DcMotor.Direction.REVERSE);
-        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);//sterling is retarted
+        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         SkirtServoR = hardwareMap.servo.get("SkirtservoR");
         SkirtServoL = hardwareMap.servo.get("SkirtservoL");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
@@ -50,15 +59,18 @@ public class OfficialTeleOp extends OpMode{
         SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
         SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
+        LowerArmLock.setPosition(LOWER_ARM_OFF);
+        Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
+        Rocky.setVolume(1, 1);
     }
     @Override
     public void loop(){
         float leftY = gamepad1.left_stick_y;
         float rightY = -gamepad1.right_stick_y;
-        double backleftpower = (leftY ) * .4;
-        double backrightpower = (rightY ) * .4;
-        double frontleftpower = (leftY * -.9 * .4);
-        double frontrightpower = (rightY * -.9)* .4;
+        double backleftpower = (leftY ) * .75;
+        double backrightpower = (rightY ) * .75;
+        double frontleftpower = (leftY * .9 * .75);
+        double frontrightpower = (rightY * .9)* .75;
 
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
@@ -85,6 +97,11 @@ public class OfficialTeleOp extends OpMode{
             SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         }
 
+        //if(gamepad1.dpad_left){
+            //SkirtServoR.setPosition(MIDDLER);
+            //SkirtServoL.setPosition(MIDDLEL);
+        //}
+
         LowerArmLock.setPosition( gamepad1.a ? LOWER_ARM_RIGHT :
                 gamepad1.b ? LOWER_ARM_LEFT : LOWER_ARM_OFF);
 
@@ -100,6 +117,9 @@ public class OfficialTeleOp extends OpMode{
         }
         if(gamepad2.y){
             Zipline.setPosition(ZIPLINE_UP);
+        }
+        if(gamepad2.b){
+            Rocky.start();
         }
     }
 }
