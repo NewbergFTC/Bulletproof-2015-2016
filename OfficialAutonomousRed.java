@@ -14,7 +14,7 @@ public class OfficialAutonomousRed extends BulletOpMode {
         super.Init();
         waitForStart();
         while (opModeIsActive()) {
-            //JohnCena.start();
+            Rocky.start();
             if(goForward(5,LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,1000))
                 return;
             sleep(9000);
@@ -29,7 +29,7 @@ public class OfficialAutonomousRed extends BulletOpMode {
             sleep(500);
             goTurn(58, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(45 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
+            if (goForward(37 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
                 return;//accelerate into wall
             sleep(500);
             //armRotate(100 , armForward, PowerForward );
