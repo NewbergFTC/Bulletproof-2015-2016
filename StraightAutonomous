@@ -16,6 +16,7 @@ public class StraightAutonomous extends BulletOpMode {
         super.Init();
         waitForStart();
         while (opModeIsActive()) {
+            Rocky.start();
             if (goForward(5, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 1000))
                 return;
             sleep(5000);
