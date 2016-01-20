@@ -49,8 +49,8 @@ public abstract class BulletOpMode extends LinearOpMode {
     final double ArmStop = 0;
     final int armForward = 1;
     final int armBack = -1;
-    final float ARM_POWER_FORWARD = (float) .1;
-    final float ARM_POWER_BACK = (float) -.1;
+    final float ARM_POWER_FORWARD = (float) .2;
+    final float ARM_POWER_BACK = (float) -.2;
     float PowerForward;
     float PowerBack;
     final static double SERVO_SKIRT_UPR = .23;
@@ -60,8 +60,8 @@ public abstract class BulletOpMode extends LinearOpMode {
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = .69;
-    final static double UPPER_ARM_UNLOCKED = .1;
+    final static double UPPER_ARM_LOCKED = .54;
+    final static double UPPER_ARM_UNLOCKED = .25;
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23;
     public static Context CONTEXT;
@@ -71,6 +71,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     protected final void Init() throws InterruptedException {
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
+        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
         leftfront = hardwareMap.dcMotor.get("lf");
         leftback = hardwareMap.dcMotor.get("lb");
@@ -83,7 +84,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
-        leftback.setDirection(DcMotor.Direction.REVERSE);
+        //leftback.setDirection(DcMotor.Direction.REVERSE);
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -130,9 +131,9 @@ public abstract class BulletOpMode extends LinearOpMode {
         ArmTiltRight.setPower(0);
     }
     public void motorTurn(double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower , double direction){//Turning robot
-        double LeftFrontMotorPower = direction * LeftFrontPower;
-        double RightFrontMotorPower = -1 *direction * RightFrontPower;
-        double LeftBackMotorPower = direction * LeftBackPower;
+        double LeftFrontMotorPower =  direction * LeftFrontPower;
+        double RightFrontMotorPower = -1 * direction * RightFrontPower;
+        double LeftBackMotorPower = -1 * direction * LeftBackPower;
         double RightBackMotorPower = -1 * direction * RightBackPower;
         leftfront.setPower(LeftFrontMotorPower);
         leftback.setPower(LeftBackMotorPower);
@@ -140,9 +141,9 @@ public abstract class BulletOpMode extends LinearOpMode {
         rightback.setPower(RightBackMotorPower);
     }
     public void motorArmRotate(double Arm_power , double direction){//Turning robot
-        double Armpower = direction * Arm_power;
-        ArmTiltRight.setPower(Armpower);
-        ArmTiltLeft.setPower(Armpower);
+        double ArmFinalPower = direction * Arm_power;
+        ArmTiltRight.setPower(ArmFinalPower);
+        ArmTiltLeft.setPower(ArmFinalPower);
     }
     public void ResetEncoders() throws InterruptedException {
         waitCycle(6);
@@ -170,7 +171,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     public void motorPowerRampUp( double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower) throws InterruptedException {
         for(int i = 3; i > 0; i--){
             leftfront.setPower(LeftFrontPower / i);
-            leftback.setPower(LeftBackPower / i);
+            leftback.setPower( -1 * LeftBackPower / i);
             rightfront.setPower(RightFrontPower / i);
             rightback.setPower(RightBackPower / i);
             sleep(250);
