@@ -21,19 +21,20 @@ public class OfficialAutonomousRed extends BulletOpMode {
             if (goForward(37 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,3500 ))
                 return;
             sleep(500);
-            goTurn(64, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
-            // goForward(20, MOTOR_POWER);
+            goTurn(64, LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(42 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,3500))
+            if (goForward(52 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,3500))
                 return;
             sleep(500);
-            goTurn(58, LEFT, LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
+            goTurn(60, LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
             sleep(500);
-            if (goForward(37 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
+            if (goForward(26 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,3500))
                 return;//accelerate into wall
             sleep(500);
-            //armRotate(100 , armForward, PowerForward );
-            //sleep(500);
+            motorArmRotate(.12,1);
+            sleep(5500);
+            StopArmMotors();
+            sleep(500);
             break;
 
         }
