@@ -28,11 +28,11 @@ public class OfficialTeleOp extends OpMode{
     final static double SERVO_SKIRT_UPR = .23;
     final static double SERVO_SKIRT_DOWNR= .1;
     final static double SERVO_SKIRT_UPL = .23;
-    final static double SERVO_SKIRT_DOWNL= 0.1;
+    final static double SERVO_SKIRT_DOWNL= 0.11;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = .47;
+    final static double UPPER_ARM_LOCKED = .54;
     final static double UPPER_ARM_UNLOCKED = .25;
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23 ;
@@ -44,7 +44,7 @@ public class OfficialTeleOp extends OpMode{
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
         rightfront.setDirection(DcMotor.Direction.REVERSE);
-        leftfront.setDirection(DcMotor.Direction.REVERSE);
+        //leftfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
@@ -69,7 +69,7 @@ public class OfficialTeleOp extends OpMode{
         float rightY = -gamepad1.right_stick_y;
         double backleftpower = (leftY ) * .75;
         double backrightpower = (rightY ) * .75;
-        double frontleftpower = (leftY * .9 * .75);
+        double frontleftpower = (leftY * .9 * .75 * -1);
         double frontrightpower = (rightY * .9)* .75;
 
         leftfront.setPower(frontleftpower);
