@@ -17,13 +17,21 @@ public class StraightAutonomous extends BulletOpMode {
         waitForStart();
         while (opModeIsActive()) {
             Rocky.start();
-            if (goForward(5, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 1000))
-                return;
+            SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
+            SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
+            //if (goForward(5, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 1000))
+            //    return;
             sleep(5000);
-            if (goForward(90, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER,12000))
-                return;
+            double ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
+            while (ultrasonicvalue > 35){
+                ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
+                motorDrive(LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
+            }
+            StopDriveMotors();
+            //if (goForward(90, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER,12000))
+                //return;
 
-            break;
+            //break;
         }
     }
 }
