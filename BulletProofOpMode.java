@@ -3,6 +3,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 //import com.qualcomm.hardware.HiTechnicNxtTouchSensor;
+import com.qualcomm.hardware.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
@@ -23,6 +24,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     private Servo Zipline;
     public DcMotorController leftController;
     public DcMotorController ArmController;
+    public HiTechnicNxtUltrasonicSensor ultrasonicSensor;
     //final double GEAR_ONE_TEETH = 16;
     //final double GEAR_TWO_TEETH = 30;
     final double CLICKS_PER_REVOLUTION = 1120;
@@ -43,9 +45,9 @@ public abstract class BulletOpMode extends LinearOpMode {
     final double FRONT_WHEEL_RATIO = 1.8;
     final double BACK_WHEEL_RATIO = 1;
     final double LEFT_FRONT_POWER = .165;
-    final double RIGHT_FRONT_POWER = .165;
+    final double RIGHT_FRONT_POWER = .155;
     final double LEFT_BACK_POWER = .15;
-    final double RIGHT_BACK_POWER = .15;
+    final double RIGHT_BACK_POWER = .125;
     final double ArmStop = 0;
     final int armForward = 1;
     final int armBack = -1;
@@ -73,6 +75,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
+        ArmLift.setDirection(DcMotor.Direction.REVERSE);
         leftfront = hardwareMap.dcMotor.get("lf");
         leftback = hardwareMap.dcMotor.get("lb");
         rightfront = hardwareMap.dcMotor.get("rf");
@@ -84,6 +87,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
+        ultrasonicSensor = (HiTechnicNxtUltrasonicSensor) hardwareMap.ultrasonicSensor.get("SonarDrive");
         //leftback.setDirection(DcMotor.Direction.REVERSE);
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -99,8 +103,8 @@ public abstract class BulletOpMode extends LinearOpMode {
         waitCycle(6);
         leftfront.setChannelMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
-        SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
-        SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
+        SkirtServoR.setPosition(SERVO_SKIRT_UPR);
+        SkirtServoL.setPosition(SERVO_SKIRT_UPL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         Zipline.setPosition(ZIPLINE_UP);//fix left front0
         Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
@@ -114,11 +118,11 @@ public abstract class BulletOpMode extends LinearOpMode {
         waitCycle(6);
         return position;
     }
-    public void motorDrive(float motorPower){  //Driving forward
-        leftfront.setPower(motorPower);
-        rightfront.setPower(motorPower);
-        leftback.setPower(motorPower);
-        rightback.setPower(motorPower);
+    public void motorDrive(double LeftFrontPower, double RightFrontPower , double LeftBackPower , double RightBackPower){  //Driving forward
+        leftfront.setPower(LeftFrontPower);
+        rightfront.setPower(RightFrontPower);
+        leftback.setPower(LeftBackPower);
+        rightback.setPower(RightBackPower);
     }
     public void StopDriveMotors(){  //Stopping the robot
         leftfront.setPower(0);
@@ -176,6 +180,12 @@ public abstract class BulletOpMode extends LinearOpMode {
             rightback.setPower(RightBackPower / i);
             sleep(250);
         }
+    }
+    public void ArmLiftUp (){
+        ArmLift.setPower(1);
+    }
+    public void ArmLiftStop (){
+        ArmLift.setPower(0);
     }
     //public void TouchSensor() throws InterruptedException{
     //ArmReset = (HiTechnicNxtTouchSensor) hardwareMap.touchSensor.get("TouchSensor");
