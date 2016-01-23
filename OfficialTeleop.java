@@ -2,6 +2,7 @@ package com.qualcomm.ftcrobotcontroller.opmodes;
 import android.media.MediaPlayer;
 import android.net.Uri;
 
+import com.qualcomm.hardware.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -21,6 +22,7 @@ public class OfficialTeleOp extends OpMode{
     private Servo LowerArmLock;
     private Servo UpperArmLock;
     private Servo Zipline;
+    private HiTechnicNxtUltrasonicSensor ultrasonicSensor;
     float PowerForward = (float) .1;
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
@@ -44,6 +46,7 @@ public class OfficialTeleOp extends OpMode{
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
         rightfront.setDirection(DcMotor.Direction.REVERSE);
+
         //leftfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
@@ -71,11 +74,13 @@ public class OfficialTeleOp extends OpMode{
         double backrightpower = (rightY ) * .75;
         double frontleftpower = (leftY * .9 * .75 * -1);
         double frontrightpower = (rightY * .9)* .75;
-
+        double sensor = ultrasonicSensor.getUltrasonicLevel();
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
         leftback.setPower(backleftpower);
         rightback.setPower(backrightpower);
+
+        telemetry.addData("Ultrasonic", String.valueOf(sensor));
 
         PowerForward = (gamepad2.a)? -1 : (float) -0.2;
         PowerBack = (gamepad2.a)? 1 : (float) 0.2;
@@ -121,5 +126,7 @@ public class OfficialTeleOp extends OpMode{
         if(gamepad2.b){
             Rocky.start();
         }
+
+
     }
 }
