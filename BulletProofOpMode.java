@@ -121,7 +121,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     public void motorDrive(double LeftFrontPower, double RightFrontPower , double LeftBackPower , double RightBackPower){  //Driving forward
         leftfront.setPower(LeftFrontPower);
         rightfront.setPower(RightFrontPower);
-        leftback.setPower(LeftBackPower);
+        leftback.setPower(LeftBackPower * -1);
         rightback.setPower(RightBackPower);
     }
     public void StopDriveMotors(){  //Stopping the robot
