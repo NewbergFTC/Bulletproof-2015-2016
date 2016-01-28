@@ -74,13 +74,13 @@ public class OfficialTeleOp extends OpMode{
         double backrightpower = (rightY ) * .75;
         double frontleftpower = (leftY * .9 * .75 * -1);
         double frontrightpower = (rightY * .9)* .75;
-        double sensor = ultrasonicSensor.getUltrasonicLevel();
+        //double sensor = ultrasonicSensor.getUltrasonicLevel();
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
         leftback.setPower(backleftpower);
         rightback.setPower(backrightpower);
 
-        telemetry.addData("Ultrasonic", String.valueOf(sensor));
+        //telemetry.addData("Ultrasonic", String.valueOf(sensor));
 
         PowerForward = (gamepad2.a)? -1 : (float) -0.2;
         PowerBack = (gamepad2.a)? 1 : (float) 0.2;
