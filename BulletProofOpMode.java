@@ -3,6 +3,7 @@ import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 //import com.qualcomm.hardware.HiTechnicNxtTouchSensor;
+import com.qualcomm.hardware.HiTechnicNxtLightSensor;
 import com.qualcomm.hardware.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -10,6 +11,7 @@ import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
 import java.io.File;
 public abstract class BulletOpMode extends LinearOpMode {
+    public HiTechnicNxtLightSensor lightSensor;
     public DcMotor leftfront;
     public DcMotor leftback;
     public DcMotor rightfront;
@@ -88,6 +90,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
         ultrasonicSensor = (HiTechnicNxtUltrasonicSensor) hardwareMap.ultrasonicSensor.get("SonarDrive");
+        lightSensor = (HiTechnicNxtLightSensor) hardwareMap.lightSensor.get("LightSensor");
         //leftback.setDirection(DcMotor.Direction.REVERSE);
         rightfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
@@ -133,6 +136,18 @@ public abstract class BulletOpMode extends LinearOpMode {
     public void StopArmMotors(){  //Stopping the robot
         ArmTiltLeft.setPower(0);
         ArmTiltRight.setPower(0);
+    }
+    public void lightsensor(){
+            lightSensor.enableLed(true);
+            double LightSensorDataRaw = lightSensor.getLightDetectedRaw();
+                while (LightSensorDataRaw < 120) {
+                    LightSensorDataRaw = lightSensor.getLightDetectedRaw();
+                    telemetry.addData("LightSensorRaw" , LightSensorDataRaw);
+                    telemetry.addData("LightSensor", String.valueOf(lightSensor.getLightDetected()));
+                    motorDrive(LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
+
+                }
+        StopDriveMotors();
     }
     public void motorTurn(double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower , double direction){//Turning robot
         double LeftFrontMotorPower =  direction * LeftFrontPower;
