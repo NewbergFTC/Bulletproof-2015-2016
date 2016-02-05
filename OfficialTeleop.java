@@ -1,14 +1,10 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
+package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
 import android.media.MediaPlayer;
 import android.net.Uri;
-
-import com.qualcomm.hardware.HiTechnicNxtUltrasonicSensor;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
-
 import java.io.File;
-
 public class OfficialTeleOp extends OpMode{
     private DcMotor leftfront;
     private DcMotor leftback;
@@ -22,7 +18,6 @@ public class OfficialTeleOp extends OpMode{
     private Servo LowerArmLock;
     private Servo UpperArmLock;
     private Servo Zipline;
-    private HiTechnicNxtUltrasonicSensor ultrasonicSensor;
     float PowerForward = (float) .1;
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
@@ -34,11 +29,13 @@ public class OfficialTeleOp extends OpMode{
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = .54;
-    final static double UPPER_ARM_UNLOCKED = .25;
+    final static double UPPER_ARM_LOCKED = .9;
+    final static double UPPER_ARM_UNLOCKED = .0;
     final static double ZIPLINE_UP = .6;
     final static double ZIPLINE_DOWN = .23 ;
     public MediaPlayer Rocky;
+    public MediaPlayer ShiaSurprise;
+    public MediaPlayer DoIt;
     @Override
     public void init(){
         leftfront = hardwareMap.dcMotor.get("lf");
@@ -46,8 +43,6 @@ public class OfficialTeleOp extends OpMode{
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
         rightfront.setDirection(DcMotor.Direction.REVERSE);
-
-        //leftfront.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
@@ -65,6 +60,10 @@ public class OfficialTeleOp extends OpMode{
         LowerArmLock.setPosition(LOWER_ARM_OFF);
         Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
         Rocky.setVolume(1, 1);
+        ShiaSurprise = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Shia.mp3")));
+        ShiaSurprise.setVolume(1, 1);
+        DoIt = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/DoIt.mp3")));
+        DoIt.setVolume(1, 1);
     }
     @Override
     public void loop(){
@@ -74,13 +73,10 @@ public class OfficialTeleOp extends OpMode{
         double backrightpower = (rightY ) * .75;
         double frontleftpower = (leftY * .9 * .75 * -1);
         double frontrightpower = (rightY * .9)* .75;
-        //double sensor = ultrasonicSensor.getUltrasonicLevel();
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
         leftback.setPower(backleftpower);
         rightback.setPower(backrightpower);
-
-        //telemetry.addData("Ultrasonic", String.valueOf(sensor));
 
         PowerForward = (gamepad2.a)? -1 : (float) -0.2;
         PowerBack = (gamepad2.a)? 1 : (float) 0.2;
@@ -102,11 +98,6 @@ public class OfficialTeleOp extends OpMode{
             SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         }
 
-        //if(gamepad1.dpad_left){
-            //SkirtServoR.setPosition(MIDDLER);
-            //SkirtServoL.setPosition(MIDDLEL);
-        //}
-
         LowerArmLock.setPosition( gamepad1.a ? LOWER_ARM_RIGHT :
                 gamepad1.b ? LOWER_ARM_LEFT : LOWER_ARM_OFF);
 
@@ -123,10 +114,20 @@ public class OfficialTeleOp extends OpMode{
         if(gamepad2.y){
             Zipline.setPosition(ZIPLINE_UP);
         }
-        if(gamepad2.b){
+        if(gamepad2.dpad_left){
+            DoIt.stop();
+            ShiaSurprise.stop();
             Rocky.start();
         }
-
-
+        if(gamepad2.dpad_up){
+            DoIt.stop();
+            Rocky.stop();
+            ShiaSurprise.start();
+        }
+        if(gamepad2.dpad_right){
+            ShiaSurprise.stop();
+            Rocky.stop();
+            DoIt.start();
+        }
     }
 }
