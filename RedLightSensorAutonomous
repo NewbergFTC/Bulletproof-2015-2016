@@ -1,17 +1,17 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
-
-import com.qualcomm.ftcrobotcontroller.opmodes.BulletOpMode;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
-
+package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+/*
+Autonomous utilizing the light sensor and the ultrasonic sensor
+to deposit climbers in the bucket
+© Bullet Proof 6712
+All rights reserved to the Country of the USA
+ */
 public class RedLightSensorAutonomous extends BulletOpMode {
     @Override
     public void initialize() {
     }
-
     @Override
     public void Update() {
     }
-
     @Override
     public void runOpMode() throws InterruptedException {
         super.Init();
@@ -20,15 +20,13 @@ public class RedLightSensorAutonomous extends BulletOpMode {
             SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
             SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
             Rocky.start();
-
-            lightsensor();
+            //Shia.start();
+            lightsensor(leftLightSensor);
             sleep(500);
-//            goTurn(45, RIGHT, LEFT_FRONT_POWER * 1.85, RIGHT_FRONT_POWER * 1.85, LEFT_BACK_POWER, RIGHT_BACK_POWER);
             if (goForward(5 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,5000 ))
                 return;
-//            sleep(500);
-            lightsensor();
-            goTurn(120, LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
+            lightsensor(leftLightSensor);
+            goTurn(105 , LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
             sleep(500);
             double ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
             while (ultrasonicvalue > 22) {
@@ -36,10 +34,14 @@ public class RedLightSensorAutonomous extends BulletOpMode {
                 motorDrive(LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
             }
             StopDriveMotors();
-            //if (goForward(28 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,5000));//accelerate into wall
+            Rocky.pause();
+            sleep(200);
+            DoIt.start();
             sleep(500);
             motorArmRotate(.12, 1);
             sleep(5500);
+            DoIt.stop();
+            Rocky.start();
             StopArmMotors();
             sleep(2000);
             ArmLiftUp();
@@ -50,12 +52,11 @@ public class RedLightSensorAutonomous extends BulletOpMode {
             sleep(500);
             StopArmMotors();
             sleep(500);
-            goForward(-5 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 5000);//might not work, if doesnt change all motor powers to negative and distance positive
-            sleep(500);
+           // goForward(5 , -LEFT_FRONT_POWER, -RIGHT_FRONT_POWER, -LEFT_BACK_POWER, -RIGHT_BACK_POWER, 5000);//might not work, if doesnt change all motor powers to negative and distance positive
+            motorDrive(-LEFT_FRONT_POWER, -RIGHT_FRONT_POWER, -LEFT_BACK_POWER, -RIGHT_BACK_POWER);
+            sleep(550);
             StopDriveMotors();
             break;
-
-
         }
     }
 }
