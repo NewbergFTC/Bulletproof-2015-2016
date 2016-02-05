@@ -1,8 +1,9 @@
-package com.qualcomm.ftcrobotcontroller.opmodes;
-
-import com.qualcomm.ftcrobotcontroller.opmodes.BulletOpMode;
-import com.qualcomm.robotcore.hardware.UltrasonicSensor;
-
+package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+/*
+Autonomous program to move robot into loading zone
+© Bullet Proof 6712
+All rights reserved to the Country of the USA
+ */
 public class OfficialAutonomousRed extends BulletOpMode {
     @Override
     public void initialize() {
@@ -18,8 +19,6 @@ public class OfficialAutonomousRed extends BulletOpMode {
             SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
             SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
             Rocky.start();
-            //if(goForward(5,LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER,1000))
-            //    return;
             sleep(9000);
             if (goForward(45 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,5000 ))
                 return;
@@ -37,7 +36,6 @@ public class OfficialAutonomousRed extends BulletOpMode {
                 motorDrive(LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER,RIGHT_BACK_POWER);
             }
             StopDriveMotors();
-            //if (goForward(28 , LEFT_FRONT_POWER , RIGHT_FRONT_POWER, LEFT_BACK_POWER , RIGHT_BACK_POWER,5000));//accelerate into wall
             sleep(500);
             motorArmRotate(.12,1);
             sleep(5500);
@@ -47,8 +45,6 @@ public class OfficialAutonomousRed extends BulletOpMode {
             sleep(500);
             ArmLiftStop();
             break;
-
-
         }
     }
 }
