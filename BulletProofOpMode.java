@@ -1,4 +1,5 @@
 package com.qualcomm.ftcrobotcontroller.us.newberg.bullet;
+
 import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
@@ -9,7 +10,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorController;
 import com.qualcomm.robotcore.hardware.Servo;
+
 import java.io.File;
+
 /*
 All imports and subroutines included within this folder for autonomous
 © Bullet Proof 6712
@@ -27,6 +30,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     public DcMotor ArmLift;
     public Servo SkirtServoR;
     public Servo SkirtServoL;
+    public Servo skirtServo;
     public Servo LowerArmLock;
     public Servo UpperArmLock;
     private Servo Zipline;
@@ -48,10 +52,10 @@ public abstract class BulletOpMode extends LinearOpMode {
     final double RIGHT_FRONT_POWER = .155;
     final double LEFT_BACK_POWER = .15;
     final double RIGHT_BACK_POWER = .125;
-    final static double SERVO_SKIRT_UPR = .23;
-    final static double SERVO_SKIRT_DOWNR= .1;
+    final static double SERVO_SKIRT_UP = .215;
+    final static double SERVO_SKIRT_DOWN = .11;
     final static double SERVO_SKIRT_UPL = .23;
-    final static double SERVO_SKIRT_DOWNL= 0.1;
+    final static double SERVO_SKIRT_DOWNL = 0.1;
     final static double UPPER_ARM_UNLOCKED = .25;
     final static double ZIPLINE_UP = .6;
     public static Context CONTEXT;
@@ -59,6 +63,7 @@ public abstract class BulletOpMode extends LinearOpMode {
     public MediaPlayer Shia;
     public MediaPlayer ShiaSurprise;
     public MediaPlayer DoIt;
+
     protected final void Init() throws InterruptedException {
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
@@ -73,9 +78,11 @@ public abstract class BulletOpMode extends LinearOpMode {
         leftController = hardwareMap.dcMotorController.get("leftController");
         SkirtServoR = hardwareMap.servo.get("SkirtservoR");
         SkirtServoL = hardwareMap.servo.get("SkirtservoL");
+        skirtServo = hardwareMap.servo.get("SkirtServo");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
         Zipline = hardwareMap.servo.get("Zipline");
+
         ultrasonicSensor = (HiTechnicNxtUltrasonicSensor) hardwareMap.ultrasonicSensor.get("SonarDrive");
         leftLightSensor = (HiTechnicNxtLightSensor) hardwareMap.lightSensor.get("LightSensor");
         rightLightSensor = (HiTechnicNxtLightSensor) hardwareMap.lightSensor.get("RightLightSensor");
@@ -93,10 +100,11 @@ public abstract class BulletOpMode extends LinearOpMode {
         waitCycle(6);
         leftfront.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
-        SkirtServoR.setPosition(SERVO_SKIRT_UPR);
-        SkirtServoL.setPosition(SERVO_SKIRT_UPL);
+        SkirtServoR.setPosition(SERVO_SKIRT_DOWN);
+        //SkirtServoL.setPosition(SERVO_SKIRT_UPL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         Zipline.setPosition(ZIPLINE_UP);
+        LowerArmLock.setPosition(.5);
         Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
         Rocky.setVolume(1, 1);
         Shia = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Shia.mp3")));
@@ -106,6 +114,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         DoIt = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/DoIt.mp3")));
         DoIt.setVolume(1, 1);
     }
+
     public int GetTicks() throws InterruptedException {
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         waitCycle(6);
@@ -114,37 +123,43 @@ public abstract class BulletOpMode extends LinearOpMode {
         waitCycle(6);
         return position;
     }
-    public void motorDrive(double LeftFrontPower, double RightFrontPower , double LeftBackPower , double RightBackPower){
+
+    public void motorDrive(double LeftFrontPower, double RightFrontPower, double LeftBackPower, double RightBackPower) {
         leftfront.setPower(LeftFrontPower);
         rightfront.setPower(RightFrontPower);
         leftback.setPower(LeftBackPower * -1);
         rightback.setPower(RightBackPower);
     }
-    public void StopDriveMotors(){
+
+    public void StopDriveMotors() {
         leftfront.setPower(0);
         rightfront.setPower(0);
         leftback.setPower(0);
         rightback.setPower(0);
     }
-    public void StopArmMotors(){
+
+    public void StopArmMotors() {
         ArmTiltLeft.setPower(0);
         ArmTiltRight.setPower(0);
     }
 
-    public void lightsensor(HiTechnicNxtLightSensor lightSensor) {
+    public void lightSensor(HiTechnicNxtLightSensor lightSensor) {
         lightSensor.enableLed(true);
         double LightSensorDataRaw = lightSensor.getLightDetectedRaw();
 
         while (LightSensorDataRaw < 120) {
             LightSensorDataRaw = lightSensor.getLightDetectedRaw();
             motorDrive(LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
+
+            telemetry.addData("LightRaw", String.valueOf(LightSensorDataRaw));
+            telemetry.addData("Light", lightSensor.getLightDetected());
         }
 
         StopDriveMotors();
     }
 
-    public void motorTurn(double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower , double direction){
-        double LeftFrontMotorPower =  direction * LeftFrontPower;
+    public void motorTurn(double LeftFrontPower, double RightFrontPower, double LeftBackPower, double RightBackPower, double direction) {
+        double LeftFrontMotorPower = direction * LeftFrontPower;
         double RightFrontMotorPower = -1 * direction * RightFrontPower;
         double LeftBackMotorPower = -1 * direction * LeftBackPower;
         double RightBackMotorPower = -1 * direction * RightBackPower;
@@ -153,11 +168,13 @@ public abstract class BulletOpMode extends LinearOpMode {
         rightfront.setPower(RightFrontMotorPower);
         rightback.setPower(RightBackMotorPower);
     }
-    public void motorArmRotate(double Arm_power , double direction){
+
+    public void motorArmRotate(double Arm_power, double direction) {
         double ArmFinalPower = direction * Arm_power;
         ArmTiltRight.setPower(ArmFinalPower);
         ArmTiltLeft.setPower(ArmFinalPower);
     }
+
     public void ResetEncoders() throws InterruptedException {
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -167,6 +184,7 @@ public abstract class BulletOpMode extends LinearOpMode {
         leftfront.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
     }
+
     public void ResetArmEncoders() throws InterruptedException {
         waitCycle(6);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -176,47 +194,58 @@ public abstract class BulletOpMode extends LinearOpMode {
         ArmTiltLeft.setMode(DcMotorController.RunMode.RUN_USING_ENCODERS);
         waitCycle(6);
     }
+
     public void waitCycle(int count) throws InterruptedException {
         for (int i = count; i > 0; i--) {
             waitOneFullHardwareCycle();
         }
     }
-    public void motorPowerRampUp( double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower) throws InterruptedException {
-        for(int i = 3; i > 0; i--){
+
+    public void motorPowerRampUp(double LeftFrontPower, double RightFrontPower, double LeftBackPower, double RightBackPower) throws InterruptedException {
+        for (int i = 3; i > 0; i--) {
             leftfront.setPower(LeftFrontPower / i);
-            leftback.setPower( -1 * LeftBackPower / i);
+            leftback.setPower(-1 * LeftBackPower / i);
             rightfront.setPower(RightFrontPower / i);
             rightback.setPower(RightBackPower / i);
             sleep(250);
         }
     }
-    public void ArmLiftUp (){
+
+    public void ArmLiftUp() {
         ArmLift.setPower(1);
     }
-    public void ArmLiftStop (){
+
+    public void ArmLiftStop() {
         ArmLift.setPower(0);
     }
 
-    public void initialize() {};
-    public void Update() {};
+    public void initialize() {
+    }
+
+    ;
+
+    public void Update() {
+    }
+
+    ;
 
     // TODO(): Can this handle a negative distance?
-    public boolean goForward(int inches , double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower, long delay) throws InterruptedException {
-        double goal = (CLICKS_PER_REVOLUTION/WHEEL_CIRCUMFERENCE)*inches;
+    public boolean goForward(int inches, double LeftFrontPower, double RightFrontPower, double LeftBackPower, double RightBackPower, long delay) throws InterruptedException {
+        double goal = (CLICKS_PER_REVOLUTION / WHEEL_CIRCUMFERENCE) * inches;
         goal = (goal - GOAL_DIFFERENCE) * DISTANCE_FACTOR;
         ResetEncoders();
         waitCycle(6);
-        int ticks ;
+        int ticks;
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
-        motorPowerRampUp(LeftFrontPower , RightFrontPower , LeftBackPower , RightBackPower);
+        motorPowerRampUp(LeftFrontPower, RightFrontPower, LeftBackPower, RightBackPower);
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         waitCycle(6);
         ticks = leftfront.getCurrentPosition();
         WatchDog dog = new WatchDog(this, delay);
         dog.start();
-        while(ticks <= goal) {
+        while (ticks <= goal) {
             ticks = leftfront.getCurrentPosition();
             if (!dog.GetRunning()) {
                 leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -230,29 +259,31 @@ public abstract class BulletOpMode extends LinearOpMode {
         StopDriveMotors();
         return false;
     }
-    public void goTurn(int degrees, double direction, double LeftFrontPower , double RightFrontPower , double LeftBackPower , double RightBackPower) throws InterruptedException {
-        int ticks ;
-        double goal = (CLICKS_PER_REVOLUTION)*degrees/360;
+
+    public void goTurn(int degrees, double direction, double LeftFrontPower, double RightFrontPower, double LeftBackPower, double RightBackPower) throws InterruptedException {
+        int ticks;
+        double goal = (CLICKS_PER_REVOLUTION) * degrees / 360;
         goal = goal * TURN_FACTOR;
         ResetEncoders();
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
-        motorTurn(LeftFrontPower , RightFrontPower , LeftBackPower , RightBackPower , direction);
+        motorTurn(LeftFrontPower, RightFrontPower, LeftBackPower, RightBackPower, direction);
         waitCycle(6);
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         waitCycle(6);
         ticks = leftfront.getCurrentPosition();
-        while(Math.abs(ticks) <= goal){
+        while (Math.abs(ticks) <= goal) {
             ticks = leftfront.getCurrentPosition();
         }
         leftController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
         StopDriveMotors();
     }
+
     public void armRotate(int degrees, int direction, double arm_power) throws InterruptedException {
-        int ticks ;
-        double goal = ((ARM_GEAR_1/ARM_GEAR_2)*(ARM_GEAR_3/ARM_GEAR_4))*(CLICKS_PER_REVOLUTION)*degrees/360;
+        int ticks;
+        double goal = ((ARM_GEAR_1 / ARM_GEAR_2) * (ARM_GEAR_3 / ARM_GEAR_4)) * (CLICKS_PER_REVOLUTION) * degrees / 360;
         ResetArmEncoders();
         waitCycle(6);
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
@@ -262,13 +293,14 @@ public abstract class BulletOpMode extends LinearOpMode {
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.READ_ONLY);
         waitCycle(6);
         ticks = ArmTiltLeft.getCurrentPosition();
-        while(Math.abs(ticks) <= goal){
+        while (Math.abs(ticks) <= goal) {
             ticks = ArmTiltLeft.getCurrentPosition();
         }
         ArmController.setMotorControllerDeviceMode(DcMotorController.DeviceMode.WRITE_ONLY);
         waitCycle(6);
         StopArmMotors();
     }
+
     @Override
     public void runOpMode() throws InterruptedException {
         Init();
