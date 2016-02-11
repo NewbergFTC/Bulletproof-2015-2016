@@ -9,11 +9,6 @@ import com.qualcomm.robotcore.hardware.Servo;
 
 import java.io.File;
 
-/*
-Main Tele-Op Program used in all competitions
-© Bullet Proof 6712
-All rights reserved to the Country of the USA
-*/
 public class OfficialTeleOp extends OpMode {
     private DcMotor leftfront;
     private DcMotor leftback;
@@ -22,25 +17,28 @@ public class OfficialTeleOp extends OpMode {
     private DcMotor ArmTiltLeft;
     private DcMotor ArmTiltRight;
     private DcMotor ArmLift;
+
     private Servo SkirtServo;
     private Servo LowerArmLock;
     private Servo UpperArmLock;
-    float PowerForward = (float) .1;
-    float PowerBack = (float) -.1;
-    final static float LIFT_POWER_FORWARD = (float) 1;
-    final static float LIFT_POWER_BACK = -1;
-    final static double SERVO_SKIRT_UP = .215;
-    final static double SERVO_SKIRT_DOWN = .11;
-    //final static double SERVO_SKIRT_UPL = .21;
-    //final static double SERVO_SKIRT_DOWNL= 0.11;
-    final static double LOWER_ARM_LEFT = .6;
-    final static double LOWER_ARM_RIGHT = .4;
-    final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = 1;
-    final static double UPPER_ARM_UNLOCKED = .0;
-    public MediaPlayer Rocky;
-    public MediaPlayer ShiaSurprise;
-    public MediaPlayer DoIt;
+
+    static final float PowerForward =.1f;
+    static final float PowerBack    = -.1f;
+
+    static final float LIFT_POWER_FORWARD = 1.0f;
+    static final float LIFT_POWER_BACK = -1.0f;
+    static final double SERVO_SKIRT_UP = .215;
+    static final double SERVO_SKIRT_DOWN = .11;
+
+    static final double LOWER_ARM_LEFT = .6;
+    static final double LOWER_ARM_RIGHT = .4;
+    static final double LOWER_ARM_OFF = .5;
+    static final double UPPER_ARM_LOCKED = 1;
+    static final double UPPER_ARM_UNLOCKED = .0;
+
+    public MediaPlayer rocky;
+    public MediaPlayer shiaSurprise;
+    public MediaPlayer doIt;
     public MediaPlayer poundCake;
     public MediaPlayer vamos;
     public MediaPlayer roboto;
@@ -51,45 +49,58 @@ public class OfficialTeleOp extends OpMode {
         leftback = hardwareMap.dcMotor.get("lb");
         rightfront = hardwareMap.dcMotor.get("rf");
         rightback = hardwareMap.dcMotor.get("rb");
-        rightfront.setDirection(DcMotor.Direction.REVERSE);
+
         ArmTiltRight = hardwareMap.dcMotor.get("ArmTiltRight");
         ArmTiltLeft = hardwareMap.dcMotor.get("ArmTiltLeft");
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
-        ArmLift.setDirection(DcMotor.Direction.REVERSE);
-        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
+
         SkirtServo = hardwareMap.servo.get("SkirtservoR");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
-        LowerArmLock.setDirection(Servo.Direction.REVERSE);
+
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
+
+        rightfront.setDirection(DcMotor.Direction.REVERSE);
+        LowerArmLock.setDirection(Servo.Direction.REVERSE);
+        ArmLift.setDirection(DcMotor.Direction.REVERSE);
+        ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
+
         SkirtServo.setPosition(SERVO_SKIRT_DOWN);
-        //SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         LowerArmLock.setPosition(LOWER_ARM_OFF);
-        Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
-        Rocky.setVolume(1, 1);
-        ShiaSurprise = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Shia.mp3")));
-        ShiaSurprise.setVolume(1, 1);
-        DoIt = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/DoIt.mp3")));
-        DoIt.setVolume(1, 1);
+
+        rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
+        rocky.setVolume(1, 1);
+
+        shiaSurprise = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Shia.mp3")));
+        shiaSurprise.setVolume(1, 1);
+
+        doIt = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/doIt.mp3")));
+        doIt.setVolume(1, 1);
+
         poundCake = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/PoundCake.mp3")));
         poundCake.setVolume(1, 1);
+
         vamos = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Vamos.mp3")));
         vamos.setVolume(1, 1);
+
         roboto = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/Roboto.mp3")));
         roboto.setVolume(1, 1);
 
-        DoIt.start();
+        // TODO; This shouldn't be needed...
+        // But it is
+        doIt.start();
         poundCake.start();
         vamos.start();
         roboto.start();
-        Rocky.start();
-        ShiaSurprise.start();
-        DoIt.pause();
+        rocky.start();
+        shiaSurprise.start();
+
+        doIt.pause();
         poundCake.pause();
         vamos.pause();
         roboto.pause();
-        Rocky.pause();
-        ShiaSurprise.pause();
+        rocky.pause();
+        shiaSurprise.pause();
     }
 
     @Override
@@ -100,6 +111,7 @@ public class OfficialTeleOp extends OpMode {
         double backrightpower = (rightY) * .75;
         double frontleftpower = (leftY * .9 * .75 * -1);
         double frontrightpower = (rightY * .9) * .75;
+
         leftfront.setPower(frontleftpower);
         rightfront.setPower(frontrightpower);
         leftback.setPower(backleftpower);
@@ -115,70 +127,69 @@ public class OfficialTeleOp extends OpMode {
         float extendPower = (gamepad2.left_bumper) ? LIFT_POWER_FORWARD : (gamepad2.right_bumper) ? LIFT_POWER_BACK : 0;
         ArmLift.setPower(extendPower);
 
-        if (gamepad1.dpad_up) {
+        if (gamepad1.dpad_up) 
             SkirtServo.setPosition(SERVO_SKIRT_UP);
-            //SkirtServoL.setPosition(SERVO_SKIRT_UPL);
 
-        }
-        if (gamepad1.dpad_down) {
-            SkirtServo.setPosition(SERVO_SKIRT_DOWN);
-            //SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
-        }
+        if (gamepad1.dpad_down) 
+            SkirtServo.setPosition(SERVO_SKIRT_DOWN); 
 
         LowerArmLock.setPosition(gamepad1.a ? LOWER_ARM_RIGHT :
                 gamepad1.b ? LOWER_ARM_LEFT : LOWER_ARM_OFF);
 
-        if (gamepad1.x) {
+        if (gamepad1.x) 
             UpperArmLock.setPosition(UPPER_ARM_LOCKED);
-        }
-        if (gamepad1.y) {
+        
+        if (gamepad1.y) 
             UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
-        }
+        
 
 
         /*
-        Epic Sound Board
-        To Intimidate All Other Teams
-        */
+         *Epic Sound Board
+         *To Intimidate All Other Teams
+         */
 
-        // Rocky
+        // rocky
         if (gamepad2.dpad_left) {
-            ShiaSurprise.pause();
-            DoIt.pause();
+            shiaSurprise.pause();
+            doIt.pause();
             poundCake.pause();
             vamos.pause();
             roboto.pause();
 
-            Rocky.seekTo(0);
-            Rocky.start();
+            rocky.seekTo(0);
+            rocky.start();
         }
 
+        // shiaSurprise
         if (gamepad2.dpad_up) {
-            DoIt.pause();
+            doIt.pause();
             poundCake.pause();
             vamos.pause();
             roboto.pause();
-            Rocky.pause();
+            rocky.pause();
 
-            ShiaSurprise.seekTo(0);
-            ShiaSurprise.start();
+            shiaSurprise.seekTo(0);
+            shiaSurprise.start();
         }
 
+        // doIt
         if (gamepad2.dpad_right) {
             poundCake.pause();
             vamos.pause();
             roboto.pause();
-            Rocky.pause();
-            ShiaSurprise.pause();
+            rocky.pause();
+            shiaSurprise.pause();
 
-            DoIt.seekTo(0);
-            DoIt.start();
+            doIt.seekTo(0);
+            doIt.start();
         }
 
+        // poundCake
         if (gamepad2.dpad_down) {
-            Rocky.pause();
-            ShiaSurprise.pause();
-            DoIt.pause();
+            rocky.pause();
+            shiaSurprise.pause();
+            doIt.pause();
             vamos.pause();
             roboto.pause();
 
@@ -186,10 +197,11 @@ public class OfficialTeleOp extends OpMode {
             poundCake.start();
         }
 
+        // vamos
         if (gamepad2.right_stick_button) {
-            Rocky.pause();
-            ShiaSurprise.pause();
-            DoIt.pause();
+            rocky.pause();
+            shiaSurprise.pause();
+            doIt.pause();
             poundCake.pause();
             roboto.pause();
 
@@ -197,10 +209,11 @@ public class OfficialTeleOp extends OpMode {
             vamos.start();
         }
 
+        // roboto
         if (gamepad2.left_stick_button) {
-            Rocky.pause();
-            ShiaSurprise.pause();
-            DoIt.pause();
+            rocky.pause();
+            shiaSurprise.pause();
+            doIt.pause();
             poundCake.pause();
             vamos.pause();
 
