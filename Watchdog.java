@@ -8,12 +8,12 @@ import java.util.concurrent.atomic.AtomicLong;
  * Created by Bullet Proof on 12/10/2015.
  */
 public class WatchDog extends Thread{
-        final private BulletProofMode _target;
+        final private BulletOpMode _target;
         final private AtomicBoolean _running;
         final private AtomicBoolean _stopped;
         final private AtomicLong _millis;
 
-        public WatchDog(BulletProofMode target, long millis)
+        public WatchDog(BulletOpMode target, long millis)
         {
             super();
 
