@@ -20,7 +20,7 @@ public class BlueLightSensorAutonomous extends BulletOpMode {
                 StopDriveMotors();
                 StopArmMotors();
 
-//                return;
+                return;
             }
 
             motorDrive(-LEFT_FRONT_POWER, -RIGHT_FRONT_POWER, -LEFT_BACK_POWER, -RIGHT_BACK_POWER);
@@ -32,7 +32,7 @@ public class BlueLightSensorAutonomous extends BulletOpMode {
                 StopDriveMotors();
                 StopArmMotors();
 
-//                return;
+                return;
             }
 
             sleep(500);
@@ -41,11 +41,9 @@ public class BlueLightSensorAutonomous extends BulletOpMode {
                 ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
                 motorDrive(LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
 
-//                if (!checkOpIsActive()) {
-//                    KillAllMotors();
-//
-//                    return;
-//                }
+                if (!opModeIsActive()) {
+                    return;
+                }
             }
 
             StopDriveMotors();
