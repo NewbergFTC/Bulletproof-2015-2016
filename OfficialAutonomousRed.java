@@ -4,6 +4,7 @@ Autonomous program to move robot into loading zone
 © Bullet Proof 6712
 All rights reserved to the Country of the USA
  */
+
 public class OfficialAutonomousRed extends BulletOpMode {
     @Override
     public void initialize() {
@@ -16,9 +17,8 @@ public class OfficialAutonomousRed extends BulletOpMode {
         super.Init();
         waitForStart();
         while (opModeIsActive()) {
-            SkirtServoR.setPosition(SERVO_SKIRT_DOWNR);
-            SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
-            Rocky.start();
+            //SkirtServo.setPosition(SERVO_SKIRT_DOWN);
+            rocky.start();
             sleep(9000);
             if (goForward(45 , LEFT_FRONT_POWER,RIGHT_FRONT_POWER,LEFT_BACK_POWER ,RIGHT_BACK_POWER,5000 ))
                 return;
