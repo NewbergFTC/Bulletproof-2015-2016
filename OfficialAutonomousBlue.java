@@ -4,6 +4,7 @@ Autonomous program to move robot into loading zone
 © Bullet Proof 6712
 All rights reserved to the Country of the USA
  */
+
 public class OfficialAutonomousBlue extends BulletOpMode {
     @Override
     public void initialize() {
