@@ -27,7 +27,7 @@ public class RedLightSensorAutonomous extends BulletOpMode {
             }
 
             sleep(500);
-            if (goForward(5, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 5000)) {
+            if (goForward(3, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER, 5000)) {
                 StopDriveMotors();
                 StopArmMotors();
 
@@ -45,7 +45,12 @@ public class RedLightSensorAutonomous extends BulletOpMode {
             }
 
             sleep(500);
-            if (goTurn(110, LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER)) {
+            motorDrive(-LEFT_FRONT_POWER, -RIGHT_FRONT_POWER, -LEFT_BACK_POWER, -RIGHT_BACK_POWER);
+            sleep(750);
+            StopDriveMotors();
+
+            sleep(500);
+            if (goTurn(115, LEFT, LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER)) {
                 StopDriveMotors();
                 StopArmMotors();
 
@@ -58,6 +63,7 @@ public class RedLightSensorAutonomous extends BulletOpMode {
             double ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
             while (ultrasonicvalue > 22) {
                 ultrasonicvalue = ultrasonicSensor.getUltrasonicLevel();
+                telemetry.addData("ultrasonic",ultrasonicvalue);
                 motorDrive(LEFT_FRONT_POWER, RIGHT_FRONT_POWER, LEFT_BACK_POWER, RIGHT_BACK_POWER);
 
                 if (!opModeIsActive()) {
