@@ -6,6 +6,7 @@ import android.net.Uri;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.ServoController;
 
 import java.io.File;
 
@@ -25,19 +26,18 @@ public class OfficialTeleOp extends OpMode {
     private Servo SkirtServo;
     private Servo LowerArmLock;
     private Servo UpperArmLock;
+    private ServoController servoController;
     float PowerForward = (float) .1;
     float PowerBack = (float) -.1;
     final static float LIFT_POWER_FORWARD = (float) 1;
     final static float LIFT_POWER_BACK = -1;
     final static double SERVO_SKIRT_UP = .215;
     final static double SERVO_SKIRT_DOWN = .11;
-    //final static double SERVO_SKIRT_UPL = .21;
-    //final static double SERVO_SKIRT_DOWNL= 0.11;
     final static double LOWER_ARM_LEFT = .6;
     final static double LOWER_ARM_RIGHT = .4;
     final static double LOWER_ARM_OFF = .5;
-    final static double UPPER_ARM_LOCKED = 1;
-    final static double UPPER_ARM_UNLOCKED = .0;
+    final static double UPPER_ARM_LOCKED = 0.935;
+    final static double UPPER_ARM_UNLOCKED = 0.018;
     public MediaPlayer Rocky;
     public MediaPlayer ShiaSurprise;
     public MediaPlayer DoIt;
@@ -57,12 +57,13 @@ public class OfficialTeleOp extends OpMode {
         ArmLift = hardwareMap.dcMotor.get("ArmLift");
         ArmLift.setDirection(DcMotor.Direction.REVERSE);
         ArmTiltLeft.setDirection(DcMotor.Direction.REVERSE);
-        SkirtServo = hardwareMap.servo.get("SkirtservoR");
+        SkirtServo = hardwareMap.servo.get("SkirtServo");
         LowerArmLock = hardwareMap.servo.get("LowerArmLock");
         LowerArmLock.setDirection(Servo.Direction.REVERSE);
         UpperArmLock = hardwareMap.servo.get("UpperArmLock");
+        servoController = hardwareMap.servoController.get("ServoCon");
+        servoController.pwmDisable();
         SkirtServo.setPosition(SERVO_SKIRT_DOWN);
-        //SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         LowerArmLock.setPosition(LOWER_ARM_OFF);
         Rocky = MediaPlayer.create(hardwareMap.appContext, Uri.fromFile(new File("/mnt/sdcard/rocky.mp3")));
@@ -94,6 +95,8 @@ public class OfficialTeleOp extends OpMode {
 
     @Override
     public void loop() {
+        servoController.pwmEnable();
+
         float leftY = gamepad1.left_stick_y;
         float rightY = -gamepad1.right_stick_y;
         double backleftpower = (leftY) * .75;
@@ -117,12 +120,9 @@ public class OfficialTeleOp extends OpMode {
 
         if (gamepad1.dpad_up) {
             SkirtServo.setPosition(SERVO_SKIRT_UP);
-            //SkirtServoL.setPosition(SERVO_SKIRT_UPL);
-
         }
         if (gamepad1.dpad_down) {
             SkirtServo.setPosition(SERVO_SKIRT_DOWN);
-            //SkirtServoL.setPosition(SERVO_SKIRT_DOWNL);
         }
 
         LowerArmLock.setPosition(gamepad1.a ? LOWER_ARM_RIGHT :
@@ -134,7 +134,6 @@ public class OfficialTeleOp extends OpMode {
         if (gamepad1.y) {
             UpperArmLock.setPosition(UPPER_ARM_UNLOCKED);
         }
-
 
         /*
         Epic Sound Board
@@ -152,7 +151,7 @@ public class OfficialTeleOp extends OpMode {
             Rocky.seekTo(0);
             Rocky.start();
         }
-
+        //Shia Surprise
         if (gamepad2.dpad_up) {
             DoIt.pause();
             poundCake.pause();
@@ -163,7 +162,7 @@ public class OfficialTeleOp extends OpMode {
             ShiaSurprise.seekTo(0);
             ShiaSurprise.start();
         }
-
+        //Do It
         if (gamepad2.dpad_right) {
             poundCake.pause();
             vamos.pause();
@@ -174,7 +173,7 @@ public class OfficialTeleOp extends OpMode {
             DoIt.seekTo(0);
             DoIt.start();
         }
-
+        //Cake Cake Cake
         if (gamepad2.dpad_down) {
             Rocky.pause();
             ShiaSurprise.pause();
@@ -185,7 +184,7 @@ public class OfficialTeleOp extends OpMode {
             poundCake.seekTo(0);
             poundCake.start();
         }
-
+        //Vamos a la Playa
         if (gamepad2.right_stick_button) {
             Rocky.pause();
             ShiaSurprise.pause();
@@ -196,7 +195,7 @@ public class OfficialTeleOp extends OpMode {
             vamos.seekTo(0);
             vamos.start();
         }
-
+        //Domo Arigato Mr. Roboto
         if (gamepad2.left_stick_button) {
             Rocky.pause();
             ShiaSurprise.pause();
